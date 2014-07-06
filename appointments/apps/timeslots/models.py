@@ -46,11 +46,18 @@ class Constraint (models.Model):
 
 class Definition (models.Model):
 
-    constraint = models.ForeignKey(Constraint)
+    constraint = models.ForeignKey(Constraint, verbose_name=_("Location"), related_name='definitions')
     
     json = JSONField(_("Definition"))
     
+    valid = models.DateField(_("From"))
+    # I run into all sorts of problems when definitions don't extend until TIMESLOTS_FUTURE
+    until = models.DateField(_("Until"), blank=True, null=True, default=None, editable=False)    
+    
+    enabled = models.BooleanField(default=True)
+    
     class Meta:
+        ordering = ['-valid']
         verbose_name = _("Timeslots")
         verbose_name_plural = _("Timeslots")
         

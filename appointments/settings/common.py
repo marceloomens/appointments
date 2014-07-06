@@ -73,3 +73,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Timeslots app configuration
+TIMESLOTS_DATE_FORMAT = '%Y-%m-%d'
+TIMESLOTS_TIME_FORMAT = '%H:%M'

@@ -14,3 +14,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'data/db.sqlite3'),
     }
 }
+
+# Timeslots app configuration
+TIMESLOTS_FUTURE = 7

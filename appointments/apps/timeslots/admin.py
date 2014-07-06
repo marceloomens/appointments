@@ -26,7 +26,9 @@ class ConstraintSetAdmin(admin.ModelAdmin):
 class DefinitionAdmin(admin.ModelAdmin):
     # list_display = ('start_date', 'constraint', 'kind', 'encoding')
     # readonly_fields = ('end_date', 'enabled')
-    list_display = ('constraint',)
+    fields = ('constraint','valid', 'until', 'json', 'enabled',)
+    list_display = ('constraint', 'valid', 'until', 'enabled',)
+    readonly_fields = ('until',)
     
     
 admin.site.register(ConstraintSet, ConstraintSetAdmin)
