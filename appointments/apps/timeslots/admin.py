@@ -3,7 +3,7 @@ from django.contrib import admin
 from jsonfield import JSONCharField
 from django.forms import Textarea
 
-from .models import ConstraintSet, Constraint, Definition
+from .models import ConstraintSet, Constraint, Definition, Holiday
 
 # Register your models here.
 
@@ -24,12 +24,17 @@ class ConstraintSetAdmin(admin.ModelAdmin):
     
 
 class DefinitionAdmin(admin.ModelAdmin):
-    # list_display = ('start_date', 'constraint', 'kind', 'encoding')
-    # readonly_fields = ('end_date', 'enabled')
+
     fields = ('constraint','valid', 'until', 'json', 'enabled',)
     list_display = ('constraint', 'valid', 'until', 'enabled',)
     readonly_fields = ('until',)
     
     
+class HolidayAdmin(admin.ModelAdmin):
+    fields = ('constraint', 'date', 'reason', 'enabled')
+    list_display = ('constraint', 'date', 'reason', 'enabled')    
+    
+    
 admin.site.register(ConstraintSet, ConstraintSetAdmin)
 admin.site.register(Definition, DefinitionAdmin)
+admin.site.register(Holiday, HolidayAdmin)

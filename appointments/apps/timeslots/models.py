@@ -63,3 +63,20 @@ class Definition (models.Model):
         
     def __str__(self):
         return "<Definition id=%s>" % (self.pk)
+        
+        
+class Holiday (models.Model):
+    
+    constraint = models.ForeignKey(Constraint, verbose_name=_("Location"), related_name='holidays')    
+
+    date = models.DateField(_("Date"))
+    reason = models.CharField(_("Reason"), max_length=128)
+
+    enabled = models.BooleanField(default=True)
+    
+    class Meta:
+        verbose_name = _("Holiday")
+        verbose_name_plural =  _("Holidays")
+        
+    def __str__(self):
+        return "<Holiday id=%s>" % (self.pk)    

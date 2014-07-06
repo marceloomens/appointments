@@ -40,8 +40,8 @@ def timeslots(request, location):
     qs = request.GET.dict()
     # Pop value or default to None
     date        = qs.pop('date', None)
-    lbound      = qs.pop('min', None)
-    ubound      = qs.pop('max', None)
+    lbound      = qs.pop('lbound', None)
+    ubound      = qs.pop('ubound', None)
 
     if date and lbound:
         return HttpResponseBadRequest()

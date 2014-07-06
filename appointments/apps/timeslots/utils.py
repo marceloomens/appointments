@@ -3,6 +3,8 @@ from django.utils.translation import ugettext as _
 
 from datetime import datetime, timedelta
 
+from .signals import willEvaluateAvailabilityForRange as rangeSignal
+
 
 def strfdate(date):
     return date.strftime(settings.TIMESLOTS_DATE_FORMAT)
@@ -69,35 +71,54 @@ def availability(lbound, ubound, constraint):
     # I can load the entire queryset in one fould sweep here...
     generator = __timeslots_generator(lbound, ubound, constraint)
     
-    # Take note of exceptions here (holidays etc.)
+    # Take note of holidays
+    holidays = constraint.holidays.filter(date__range=(lbound, ubound))
+
     # Allow signal listeners to register callback function
+    callbacks = rangeSignal.send(__name__, lbound=lbound, ubound=ubound, constraint=constraint)
     
     for n in range((ubound-lbound).days):
         date = lbound + timedelta(n)
-        # If date is an exception (see above), bail here
-
-        timeslots = generator(date)
-        if timeslots:
-            # Allow signal handlers to update timeslots            
-            # for (receiver, callback) in callbacks:
-            #     try: 
-            #         callback(date, timeslots)
-            #     except Exception as e:
-            #         import logging
-            #         l = logging.getLogger(__name__)
-            #         l.warning("willEvaluateAvailabilityForRange callback threw an exception.", extra=e)
-            # If final is empty then the date is fully booked...
-            final = [strftime(k) for (k, v) in timeslots.items() if v > 0]
-
+        # If date is a holiday, bail here
+        
+        if holidays.filter(date=date).count() > 0:
+            data = {
+                    'available' : False,
+                    'status'    : 'holiday',
+                    'code'      : 3,
+                     # Replace with holiday message
+                    'msg'       : _("Holiday"),
+                    'timeslots' : [],
+                }
+            
         else:
-            final = []
+            timeslots = generator(date)
+            if timeslots:
+                # Allow signal handlers to update timeslots            
+                for (receiver, callback) in callbacks:
+                    try: 
+                        callback(date, timeslots)
+                    except Exception as e:
+                        import logging
+                        l = logging.getLogger(__name__)
+                        l.warning("willEvaluateAvailabilityForRange callback threw an exception.", extra=e)
+                # If final is empty then the date is fully booked...
+                final = [strftime(k) for (k, v) in timeslots.items() if v > 0]
+                data =  {
+                    'available' : True if final else False,
+                    'status'    : 'available' if final else 'fully booked',
+                    'code'      : 0 if final else 2,
+                    'msg'       : _("Available") if final else _("Fully booked"), 
+                    'timeslots' : final,
+                }
+    
+            else:
+                data =  {
+                    'available' : False,
+                    'status'    : 'unavailable',
+                    'code'      : 1,
+                    'msg'       : _("Unavailable"), 
+                    'timeslots' : [],
+                }
 
-        result =  {
-                'available' : True if final else False,
-                # Way too much front-end in my backend :-)
-                # 'class'     : 'date-available' if final else 'ui-state-error date-fully-booked',
-                # 'msg'       : _("Available") if final else _("No timeslots available"),
-                'timeslots' : final,
-            }
-
-        yield date, result  
+        yield date, data  
