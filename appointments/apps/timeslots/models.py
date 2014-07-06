@@ -5,9 +5,20 @@ from jsonfield import JSONField
 
 # Create your models here.
 
-#  TO DO
-# - Generalize constraints
-# - Allow multiple constraints per Definition
+class Action (models.Model):
+
+    name = models.CharField(max_length=64, unique=True)
+    slug = models.SlugField(max_length=64, unique=True)
+        
+    enabled = models.BooleanField(default=True) 
+
+    class Meta:
+        verbose_name = _("Action")
+        verbose_name_plural =  _("Actions")
+    
+    def __str__(self):
+        return  "<Action: %s>" % (self.name)
+
 
 class ConstraintSet (models.Model):
 
@@ -22,9 +33,6 @@ class ConstraintSet (models.Model):
     
     def __str__(self):
         return  "<ConstraintSet/Location: %s>" % (self.name)
-        
-    # def choices(self):
-    #     return [(value.slug, value.name) for value in self.values.all() if value.enabled]
             
             
 class Constraint (models.Model):
@@ -33,6 +41,7 @@ class Constraint (models.Model):
     slug = models.SlugField(max_length=64, unique=True)
 
     key = models.ForeignKey(ConstraintSet, related_name='values')
+    actions = models.ManyToManyField(Action, related_name='constraints', blank=True)
 
     enabled = models.BooleanField(default=True)
 
