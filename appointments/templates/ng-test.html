@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="timeslots">
+{% load i18n staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <title>Angular-UI datepicker</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css" media="screen" />
+    <script src="{% static 'js/angular.js' %}"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.js' %}"></script>
+    <script src="{% static 'js/timeslots.js' %}"></script>
+</head>
+<body style="margin-left: 20px;">{% verbatim %}
+    <h1>Timeslots</h1>
+    <form ng-controller="TimeslotCtrl as timeslots">
+        <p>
+            <label for="country">Country</label><br />
+            <select></select><br /><br />
+            <input name="country" id="country" ng-model="country" disabled />
+        </p>
+        
+        <p>
+            <label for="city">City</label><br />
+            <select ng-model="city" ng-options="city[0] for city in cities"></select><br /><br />
+            <input name="city" id="city" ng-model="city[0]" disabled />
+        </p>
+        
+        <p>
+            <label for="date">Date</label><br />
+            <input name="date" id="date" ng-model="dt" disabled /><br /><br />
+            <div style="display:inline-block; min-height:290px;">
+                <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+            </div>
+        </p>
+        
+        <p>
+            <label for="time">Time:</label><br />
+            <input name="time" id="time" ng-model="time" disabled />
+        </p>
+    </form>
+    <h2>{{ city }}</h2>
+{% endverbatim %}</body>
+</html>

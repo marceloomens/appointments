@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import serializers
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -14,18 +15,27 @@ from .utils import availability, strfdate, strpdate
 
 # Create your views here.
 
+def ng_test(request):
+    return render(request, template_name='ng-test.html')
+
+
+
 @require_GET
 def countries(request):
     # Filter disables countries
-    data = [(country.name, country.slug) for country in ConstraintSet.objects.all()]
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    # data = [(country.name, country.slug) for country in ConstraintSet.objects.all()]
+    # return HttpResponse(json.dumps(data), content_type='application/json')
+    data = serializers.serialize('json', ConstraintSet.objects.all())
+    return HttpResponse(data, content_type='application/json')
 
 
 @require_GET
 def locations(request, country):
     country = get_object_or_404(ConstraintSet, slug=country)
-    data = [(location.name, location.slug) for location in country.values.all()]
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    # data = [(location.name, location.slug) for location in country.values.all()]
+    # return HttpResponse(json.dumps(data), content_type='application/json')
+    data = serializers.serialize('json', country.values.all())
+    return HttpResponse(data, content_type='application/json')
 
 @require_GET
 def timeslots(request, location):
