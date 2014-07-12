@@ -105,8 +105,10 @@ def timeslots(request, location):
         ubound = maxbound
 
     data = {
-            'minbound'  : strfdate(minbound),
-            'maxbound'  : strfdate(maxbound),
+            #'minbound'  : strfdate(minbound),
+            #'maxbound'  : strfdate(maxbound),
+            'minbound'  : minbound.isoformat(),
+            'maxbound'  : maxbound.isoformat(),            
             'today'     : strfdate(today),
             # Change to first available date
             'default'   : strfdate(today),

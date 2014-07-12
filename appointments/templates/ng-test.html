@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>Angular-UI datepicker</title>
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css" media="screen" />
-    <script src="{% static 'js/angular.js' %}"></script>
-    <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" type="text/css" media="screen" />
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.min.js' %}"></script>
     <script src="{% static 'js/timeslots.js' %}"></script>
 </head>
 <body style="margin-left: 20px;">{% verbatim %}
@@ -15,26 +16,33 @@
     <form ng-controller="TimeslotCtrl as timeslots">
         <p>
             <label for="country">Country</label><br />
-            <select></select><br /><br />
-            <input name="country" id="country" ng-model="country" disabled />
+            <select ng-model="country" ng-options="country.fields.name for country in countries" ng-change="countryChanged()">
+                <option value="">-- select country --</option>
+            </select><br /><br />
+            <input name="country" id="country" ng-model="country.fields.name" disabled />
         </p>
         
         <p>
             <label for="city">City</label><br />
-            <select ng-model="city" ng-options="city[0] for city in cities"></select><br /><br />
-            <input name="city" id="city" ng-model="city[0]" disabled />
+            <select ng-model="city" ng-options="city.fields.name for city in cities" ng-change="cityChanged()">
+                <option value="">-- select city --</option>
+            </select><br /><br />
+            <input name="city" id="city" ng-model="city.fields.name" disabled />
         </p>
         
         <p>
             <label for="date">Date</label><br />
-            <input name="date" id="date" ng-model="dt" disabled /><br /><br />
             <div style="display:inline-block; min-height:290px;">
-                <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-            </div>
+                <datepicker ng-model="date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" class="well well-sm"></datepicker>
+            </div><br />
+            <input name="date" id="date" ng-model="date" disabled />
         </p>
         
         <p>
             <label for="time">Time:</label><br />
+            <select ng-model="time" ng-options="timeslot for timeslot in timeslots">
+                <option value="">-- select timeslot --</option>
+            </select><br /><br />
             <input name="time" id="time" ng-model="time" disabled />
         </p>
     </form>
