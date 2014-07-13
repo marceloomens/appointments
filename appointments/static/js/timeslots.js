@@ -17,7 +17,7 @@
         }
         
         $scope.clearCountry = function() {
-            $scope.countries = []
+            $scope.countries = [];
             $scope.country = null;            
             $scope.clearCity();
         }
@@ -26,6 +26,14 @@
             $scope.clearDate();
             if (null === $scope.city) {   
             } else {
+                // Obtain actions for city
+                $http.get('/api/actions/'+$scope.city.fields.slug, {cache: true}).
+                    success(function(data, status, headers, config) {
+                        $scope.actions = data;
+                    }).
+                    error(function(data, status, headers, config) {
+                    });
+                // Obtain timeslots for city
                 $http.get('/api/timeslots/'+$scope.city.fields.slug, {cache: true}).
                     success(function(data, status, headers, config) {
                         $scope.datetimes = data;
@@ -43,7 +51,13 @@
         $scope.clearCity = function() {
             $scope.cities = [];
             $scope.city = null;
-            $scope.clearDate();    
+            $scope.clearDate();
+            $scope.clearAction();
+        }
+
+        $scope.clearAction = function() {
+            $scope.actions = [];
+            $scope.acion = null;
         }
 
         $scope.dateChanged = function() {
@@ -68,7 +82,7 @@
             $scope.time = null;            
         }
         
-        $scope.disabled = function(date, mode) {
+        $scope.disabled = function(date) {            
     
             if ($scope.datetimes === null) return true;
             key = $scope.keyForDate(date);
@@ -91,6 +105,6 @@
             }).
             error(function(data, status, headers, config) { 
             });
-        
+     
     }]);
 })();

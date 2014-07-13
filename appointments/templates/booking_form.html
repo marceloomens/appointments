@@ -1,0 +1,43 @@
+{% load i18n %}
+<form action="" method="post" class="form_ll" ng-controller="TimeslotCtrl">
+    {% csrf_token %}
+    <p class="mandatory">{% trans "Mandatory fields are denoted with a *" %}</p>
+
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <ol>
+            <li>
+                <label for="country">Country</label>
+                <select name="country" id="country" ng-model="country" ng-options="country.fields.name for country in countries" ng-change="countryChanged()">
+                    <option value="">-- select country --</option>
+                </select>
+            </li>
+            <li>
+                <label for="city">City</label>
+                <select name="city" id="city" ng-model="city" ng-options="city.fields.name for city in cities" ng-change="cityChanged()">
+                    <option value="">-- select city --</option>
+                </select>
+            </li>
+            <li>
+                <label for="action">Action</label>
+                <select name="action" id="action" ng-model="action" ng-options="action.fields.name for action in actions">
+                    <option value="">-- select action --</option>
+                </select>
+            </li>
+            <li>
+                <label for="date">Date</label><br />
+                <div style="display:inline-block; min-height:290px;">
+                    <datepicker class="datepicker" ng-model="date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" class="well well-sm"></datepicker>
+                </div>
+            </li>
+            <li>
+                <label for="time">Time:</label>
+                <select name="time" id="time" ng-model="time" ng-options="timeslot for timeslot in timeslots">
+                    <option value="">-- select timeslot --</option>
+                </select>
+            </li>
+        </ol>
+    </fieldset>
+
+    <p><input type="submit" name="submit" value="{{ submit }}" class="submit" /></p>
+</form>

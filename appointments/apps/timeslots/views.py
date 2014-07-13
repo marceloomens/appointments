@@ -18,7 +18,11 @@ from .utils import availability, strfdate, strpdate
 def ng_test(request):
     return render(request, template_name='ng-test.html')
 
-
+@require_GET
+def actions(request, location):
+    location = get_object_or_404(Constraint, slug=location)
+    data = serializers.serialize('json', location.actions.all())
+    return HttpResponse(data, content_type='application/json')
 
 @require_GET
 def countries(request):

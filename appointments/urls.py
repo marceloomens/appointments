@@ -11,4 +11,6 @@ urlpatterns = patterns('',
     url(r'^api/', include('appointments.apps.timeslots.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^', include('appointments.apps.common.urls')),
 )

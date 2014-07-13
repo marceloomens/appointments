@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="timeslots">
+<head>
+{% load i18n staticfiles %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{% trans "Appointments by Marcel Oomens" %}{% endblock %}</title>
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="stylesheet" href="{% static 'css/nlembassy/css/screen.css' %}" type="text/css" media="screen" />
+    <!--[if IE 8]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie8.css' %}" type="text/css" media="screen" /><![endif]-->
+    <!--[if lte IE 7]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie7.css' %}" type="text/css" media="screen" /><![endif]-->
+    <!--[if lte IE 6]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie6.css' %}" type="text/css" media="screen" /><![endif]-->
+    <link rel="stylesheet" href="{% static 'css/nlembassy/css/print.css' %}" type="text/css" media="print" />
+
+    <link rel="shortcut icon" href="http://www.rijkshuisstijl.nl/favicon.ico" type="image/x-icon" />    
+    
+    {% block head %}{% endblock %}
+</head>
+<body id="login">
+    <div class="container yellow">
+        <div class="header">
+            <span></span>
+            <h1 class="branding"><img src="{% static 'css/nlembassy/logos/RO_Logo_Homepage.png' %}" alt="Rijksoverheid" height="87" width="500" /></h1>
+        </div>
+
+        <div class="content_wrapper1"><div class="content_wrapper2">
+            <div class="content">
+        
+                {% if messages %}
+                <div class="mod message_info">
+                    <h2>{% trans "Information" %}</h2>
+                    <ul class="bullets">
+                        {% for message in messages%}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                {% if form.errors %}
+                <div class="mod message_err">
+                    <h2>{% trans "Please check your input" %}</h2>
+                    <ul class="bullets">
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+        
+                <div class="content_main">
+                    {% block body %}{% endblock %}
+                </div>
+
+            </div></div>
+        </div>
+
+        <div class="footer">
+                &nbsp; <!-- this 'space' is necessary to display the bottom border shadow!!! -->
+            <span></span>
+        </div>
+    </div>
+</body>
+</html>

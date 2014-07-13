@@ -1,3 +1,7 @@
+aside {
+    text-align: right;
+}
+
 tbody .btn-default {
     background-color: #efe;
     border-color: #090;
