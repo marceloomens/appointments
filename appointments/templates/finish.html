@@ -1,0 +1,10 @@
+{% extends 'common.html' %}
+
+{% block header %}
+<h1>Thank you</h1>
+<p>You can now close this browser window.</p>
+<ul>
+    <li><a href="{% url 'home' %}" title="Book another appointment">Book another appointment&nbsp;&rarr;</a></li>
+    <li><a href="{% url 'reminder' %}" title="Remind me of my upcoming appointments">Remind me of my upcoming appointments&nbsp;&rarr;</a></li>
+</ul>
+{% endblock %}

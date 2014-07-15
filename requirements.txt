@@ -1,5 +1,7 @@
 Django==1.6.5
 itsdangerous==0.24
 jsonfield==0.9.20
+python-postmark==0.4.3
 pytz==2014.4
+raven==5.0.0
 wsgiref==0.1.2

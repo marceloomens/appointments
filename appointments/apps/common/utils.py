@@ -21,9 +21,7 @@ def availability_for_range_handler(sender, **kwargs):
     # heuristics in my subsequent loops
     appointments = Appointment.objects.filter(constraint=kwargs['constraint'],
         date__range=(kwargs['lbound'], kwargs['ubound']))
-        
-    print("I'm called")
-        
+                
     def availability_for_date_callback(date, timeslots):
     
         for appointment in appointments:

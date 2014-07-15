@@ -1,0 +1,36 @@
+{% extends 'common.html' %}
+
+{% block header %}
+<h1>Request a reminder</h1>
+<p>Receive an e-mail reminder of your future appointments.</p>
+{% endblock %}
+
+{% block content%}
+<form action="" method="post">
+
+    <legend></legend>
+    <p><small>Fields denoted with * are mandatory.</small></p>
+
+    {% csrf_token %}
+
+    {% for field in form %}
+    <section class="row">
+        <aside class="col-xs-3">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        </aside>
+        <section class="col-xs-9">
+            {{ field }}
+        </section>
+    </section>
+    {% endfor %}
+    
+    <section class="row">
+        <aside class="col-xs-3">
+        </aside>
+        <section class="col-xs-9">
+            <input type="submit" />
+        </section>
+    </section>
+    
+</form>
+{% endblock %}

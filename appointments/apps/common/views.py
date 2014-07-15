@@ -1,16 +1,18 @@
+from django.contrib import messages
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import AppointmentForm, ReminderForm
 from .models import Appointment
 
 # Create your views here.
 
 def book(request):
     # I would much prefer to set ng_app in my template
-    return render(request, 'book.html', {'ng_app': True})
+    return render(request, 'book.html')
     
 def cancel(request, payload):
-    pass
+    return render(request, 'cancel.html')
 
 def confirm(request, payload):
     from itsdangerous import BadSignature
@@ -27,7 +29,16 @@ def confirm(request, payload):
     appointment.confirm()
     appointment.user.verify()
     
-    return render(request, 'confirm.html')
+    return redirect('finish')
     
-def remind(request):
-    pass
+def reminder(request):
+    if 'POST' == request.method:
+        form = ReminderForm(request.POST)
+        if form.is_valid():
+            # Send the reminder
+            return redirect('finish')
+
+    else:
+        form = ReminderForm()
+            
+    return render(request, 'reminder.html', {'form': form})
