@@ -13,10 +13,10 @@ class Action (models.Model):
     enabled = models.BooleanField(default=True) 
 
     class Meta:
-        verbose_name = _("Action")
-        verbose_name_plural =  _("Actions")
+        verbose_name = _("action")
+        verbose_name_plural =  _("actions")
     
-    def __str__(self):
+    def __unicode__(self):
         return  "<Action: %s>" % (self.name)
 
 
@@ -28,11 +28,11 @@ class ConstraintSet (models.Model):
     enabled = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = _("Location")
-        verbose_name_plural =  _("Locations")
+        verbose_name = _("county")
+        verbose_name_plural =  _("countries")
     
-    def __str__(self):
-        return  "<ConstraintSet/Location: %s>" % (self.name)
+    def __unicode__(self):
+        return  "<Country: %s>" % (self.name)
             
             
 class Constraint (models.Model):
@@ -46,46 +46,46 @@ class Constraint (models.Model):
     enabled = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = _("City")
-        verbose_name_plural =  _("Cities")
+        verbose_name = _("city")
+        verbose_name_plural =  _("cities")
         
-    def __str__(self):
-        return "<Constraint/Location: %s, %s>" % (self.key.name, self.name)
+    def __unicode__(self):
+        return "<City: %s, %s>" % (self.name, self.key.name)
 
 
 class Definition (models.Model):
 
-    constraint = models.ForeignKey(Constraint, verbose_name=_("Location"), related_name='definitions')
+    constraint = models.ForeignKey(Constraint, verbose_name=_("location"), related_name='definitions')
     
-    json = JSONField(_("Definition"))
+    json = JSONField(_("definition"))
     
-    valid = models.DateField(_("From"))
+    valid = models.DateField(_("from"))
     # I run into all sorts of problems when definitions don't extend until TIMESLOTS_FUTURE
-    until = models.DateField(_("Until"), blank=True, null=True, default=None, editable=False)    
+    until = models.DateField(_("until"), blank=True, null=True, default=None, editable=False)    
     
     enabled = models.BooleanField(default=True)
     
     class Meta:
         ordering = ['-valid']
-        verbose_name = _("Timeslots")
-        verbose_name_plural = _("Timeslots")
+        verbose_name = _("timeslots")
+        verbose_name_plural = _("timeslots")
         
-    def __str__(self):
+    def __unicode__(self):
         return "<Definition id=%s>" % (self.pk)
         
         
 class Holiday (models.Model):
     
-    constraint = models.ForeignKey(Constraint, verbose_name=_("Location"), related_name='holidays')    
+    constraint = models.ForeignKey(Constraint, verbose_name=_("location"), related_name='holidays')    
 
-    date = models.DateField(_("Date"))
-    reason = models.CharField(_("Reason"), max_length=128)
+    date = models.DateField(_("date"))
+    reason = models.CharField(_("reason"), max_length=128)
 
     enabled = models.BooleanField(default=True)
     
     class Meta:
-        verbose_name = _("Holiday")
-        verbose_name_plural =  _("Holidays")
+        verbose_name = _("holiday")
+        verbose_name_plural =  _("holiday")
         
-    def __str__(self):
+    def __unicode__(self):
         return "<Holiday id=%s>" % (self.pk)    

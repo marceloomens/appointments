@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from .views import actions, countries, locations, timeslots, ng_test
+from .views import actions, countries, locations, timeslots # , ng_test
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,5 +13,5 @@ urlpatterns = patterns('',
     url(r'^locations/(?P<country>[\d\D]+)/$', locations, name='locations_api'),
     url(r'^timeslots/(?P<location>[\d\D]+)/$', timeslots, name='timeslots_api'),
     
-    url(r'^ng-test/$', ng_test, name='ng-test'),
+    # url(r'^ng-test/$', ng_test, name='ng-test'),
 )

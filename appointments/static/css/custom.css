@@ -1,8 +1,39 @@
-aside {
-    text-align: right;
+body {
+    background-color: rgb(243, 245, 246);
+    color: #000;
+    line-height: 1.5;
 }
+
+.container {
+    background-color: white;
+    box-shadow: 0px 0px 10px #333;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 530px !important;
+}
+
+header { margin-bottom: 20px; }
+footer { margin-top: 20px; }
+
+aside { text-align: right; }
 
 tbody .btn-default {
     background-color: #efe;
     border-color: #090;
 }
+
+a:link { color: #154273; text-decoration: none; }
+a:visited { color: #696969; }
+a:hover, a:visited:hover, a:active, a:focus { color: #0162cd; text-decoration: underline; }
+
+h1, h2, h3, h4 { 
+    font-weight: normal; 
+    line-height: 1.2;
+}
+
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.2em; }
+h4 { font-size: 1.1em;}
+
+input, select { margin-bottom: 20px; }

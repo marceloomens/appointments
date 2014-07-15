@@ -15,8 +15,8 @@ from .utils import availability, strfdate, strpdate
 
 # Create your views here.
 
-def ng_test(request):
-    return render(request, template_name='ng-test.html')
+# def ng_test(request):
+#     return render(request, template_name='ng-test.html')
 
 @require_GET
 def actions(request, location):

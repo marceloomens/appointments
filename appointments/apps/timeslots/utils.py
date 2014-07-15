@@ -87,7 +87,7 @@ def availability(lbound, ubound, constraint):
                     'status'    : 'holiday',
                     'code'      : 3,
                      # Replace with holiday message
-                    'msg'       : _("Holiday"),
+                    'msg'       : _("holiday"),
                     'timeslots' : [],
                 }
             
@@ -108,7 +108,7 @@ def availability(lbound, ubound, constraint):
                     'available' : True if final else False,
                     'status'    : 'available' if final else 'fully booked',
                     'code'      : 0 if final else 2,
-                    'msg'       : _("Available") if final else _("Fully booked"), 
+                    'msg'       : _("available") if final else _("fully booked"), 
                     'timeslots' : final,
                 }
     
@@ -117,7 +117,7 @@ def availability(lbound, ubound, constraint):
                     'available' : False,
                     'status'    : 'unavailable',
                     'code'      : 1,
-                    'msg'       : _("Unavailable"), 
+                    'msg'       : _("unavailable"), 
                     'timeslots' : [],
                 }
 

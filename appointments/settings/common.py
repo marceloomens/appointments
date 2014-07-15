@@ -55,6 +55,8 @@ ROOT_URLCONF = 'appointments.urls'
 
 WSGI_APPLICATION = 'appointments.wsgi.application'
 
+AUTH_USER_MODEL = 'common.User'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 

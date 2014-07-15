@@ -1,68 +1,111 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="timeslots">
-<head>
 {% load i18n staticfiles %}
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{% block title %}{% trans "Appointments by Marcel Oomens" %}{% endblock %}</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bootstrap 101 Template</title>
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="robots" content="index, follow" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" media="screen" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->    
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" type="text/css" media="screen" />
 
-    <link rel="stylesheet" href="{% static 'css/nlembassy/css/screen.css' %}" type="text/css" media="screen" />
-    <!--[if IE 8]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie8.css' %}" type="text/css" media="screen" /><![endif]-->
-    <!--[if lte IE 7]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie7.css' %}" type="text/css" media="screen" /><![endif]-->
-    <!--[if lte IE 6]><link rel="stylesheet" href="{% static 'css/nlembassy/css/ie/ie6.css' %}" type="text/css" media="screen" /><![endif]-->
-    <link rel="stylesheet" href="{% static 'css/nlembassy/css/print.css' %}" type="text/css" media="print" />
-
-    <link rel="shortcut icon" href="http://www.rijkshuisstijl.nl/favicon.ico" type="image/x-icon" />    
-    
-    {% block head %}{% endblock %}
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.min.js' %}"></script>
+    <script src="{% static 'js/timeslots.js' %}"></script>
 </head>
-<body id="login">
-    <div class="container yellow">
-        <div class="header">
-            <span></span>
-            <h1 class="branding"><img src="{% static 'css/nlembassy/logos/RO_Logo_Homepage.png' %}" alt="Rijksoverheid" height="87" width="500" /></h1>
-        </div>
+<body>
 
-        <div class="content_wrapper1"><div class="content_wrapper2">
-            <div class="content">
+    <div class="container">
+        <header>
+            <div class="branding"><img src="{% static 'img/RO_Logo_Homepage.png' %}" alt="Rijksoverheid" height="87" width="500" /></div>
+            
+            <h1>Schedule an appointment</h1>
+            <ul>
+                <li><a href="#" title="Remind me of my upcoming appointments">Remind me of my upcoming appointments&nbsp;&rarr;</a></li>
+            </ul>
+
+        </header>
+
+        <form ng-controller="TimeslotCtrl as timeslots">
+            
+            <legend></legend>
+            <p><small>Fields denoted with * are mandatory.</small></p>
+    
+            <section class="row">
+                <aside class="col-xs-3">
+                    <label for="country">Country</label><br />
+                </aside>
+                <section class="col-xs-9">
+                    <select name="country" id="country" ng-model="country" ng-options="country.fields.name for country in countries" ng-change="countryChanged()">
+                        <option value="">-- select country --</option>
+                    </select>
+                </section>
+            </section>
+    
+            <section class="row">
+                <aside class="col-xs-3">
+                    <label for="city">City</label><br />
+                </aside>
+                <section class="col-xs-9">
+                    <select name="city" id="city" ng-model="city" ng-options="city.fields.name for city in cities" ng-change="cityChanged()">
+                        <option value="">-- select city --</option>
+                    </select>
+                </section>
+            </section>
         
-                {% if messages %}
-                <div class="mod message_info">
-                    <h2>{% trans "Information" %}</h2>
-                    <ul class="bullets">
-                        {% for message in messages%}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                
-                {% if form.errors %}
-                <div class="mod message_err">
-                    <h2>{% trans "Please check your input" %}</h2>
-                    <ul class="bullets">
-                        {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
+            <section class="row">
+                <aside class="col-xs-3">
+                    <label for="action">Action</label><br />
+                </aside>
+                <section class="col-xs-9">
+                    <select name="action" id="action" ng-model="action" ng-options="action.fields.name for action in actions">
+                        <option value="">-- select action --</option>
+                    </select>
+                </section>
+            </section>
+            
+            <section class="row">
+                <aside class="col-xs-3">
+                    <label for="date">Date</label><br />
+                </aside>
+                <section class="col-xs-9">
+                    <div style="display:inline-block;">
+                        <datepicker name="action" id="action" ng-model="date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" class="well well-sm"></datepicker>
+                    </div>
+                </section>
+            </section>
+            
+            <section class="row">
+                <aside class="col-xs-3">
+                    <label for="time">Time:</label><br />
+                </aside>
+                <section class="col-xs-9">
+                    <select name="time" id="time" ng-model="time" ng-options="timeslot for timeslot in timeslots">
+                        <option value="">-- select timeslot --</option>
+                    </select>
+                </section>
+            </section>
+            
+            <section class="row">
+                <aside class="col-xs-3">
+                </aside>
+                <section class="col-xs-9">
+                    <input type="submit" />
+                </section>
+            </section>
+            
+        </form>
         
-                <div class="content_main">
-                    {% block body %}{% endblock %}
-                </div>
-
-            </div></div>
-        </div>
-
-        <div class="footer">
-                &nbsp; <!-- this 'space' is necessary to display the bottom border shadow!!! -->
-            <span></span>
-        </div>
+        <footer>
+            <div class="branding"><img src="{% static 'img/RO_Footer_Homepage.png' %}" alt="Rijksoverheid" height="25" width="500" /></div>
+        </footer>
     </div>
+
 </body>
 </html>
