@@ -7,8 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from appointments.apps.timeslots.models import Action, Constraint
 
-from . import utils
-
 # Create your models here.
 
 class Appointment(models.Model):
@@ -75,7 +73,8 @@ class Appointment(models.Model):
         pass
 
     def get_url_safe_key(self):
-        s = utils.get_serializer()
+        from .utils import get_serializer
+        s = get_serializer()
         return s.dumps(self.pk)
         
     class Meta:
@@ -181,3 +180,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+        
+        
+# Register my signal listener
+from .utils import availability_for_range_handler

@@ -6,7 +6,8 @@ from .models import Appointment
 # Create your views here.
 
 def book(request):
-    return render(request, 'common.html')
+    # I would much prefer to set ng_app in my template
+    return render(request, 'book.html', {'ng_app': True})
     
 def cancel(request, payload):
     pass
