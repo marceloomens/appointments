@@ -1,14 +1,63 @@
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
 
-from .forms import AppointmentForm, ReminderForm
-from .models import Appointment
+import dateutil.parser, json
+
+from appointments.apps.timeslots.models import Action, Constraint
+from appointments.apps.timeslots.utils import strptime
+
+from .forms import ReminderForm
+from .models import Appointment, User
 
 # Create your views here.
 
 def book(request):
-    # I would much prefer to set ng_app in my template
+    
+    if 'POST' == request.method and request.is_ajax():
+        fields = json.loads(request.body)
+        
+        try:
+            user = User.objects.get(email=fields['email'])
+        except User.DoesNotExist:
+            user = User(email=fields['email'], is_active=False)
+        
+        try:
+            action = Action.objects.get(slug=fields['action'])
+        except Action.DoesNotExist:
+            # This is an error; time to fail
+            pass
+        
+        try:
+            constraint = Constraint.objects.get(slug=fields['constraint'])
+        except Constraint.DoesNotExist:
+            # This is an error; time to fail
+            pass
+            
+        if action not in constraint.actions.all():
+            # This is an error; time to fail
+            pass            
+
+        date = dateutil.parser.parse(fields['date']).date()
+        time = strptime(fields['time'])
+        
+        appointment = Appointment(
+                user=user,
+                action=action,
+                constraint=constraint,
+                date=date,
+                time=time
+            )
+            
+        # Save the appointment
+        print("Yay!")
+        print(appointment)
+
+    
+    elif 'POST' == request.method:
+        pass
+    
     return render(request, 'book.html')
     
 def cancel(request, payload):

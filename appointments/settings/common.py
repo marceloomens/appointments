@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third-party apps
+    'raven.contrib.django.raven_compat',
     # My apps
     'appointments.apps.timeslots',
     'appointments.apps.common',
@@ -54,8 +55,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'appointments.urls'
 
 WSGI_APPLICATION = 'appointments.wsgi.application'
-
-AUTH_USER_MODEL = 'common.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -83,6 +82,16 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+# Auth app configuration
+
+AUTH_USER_MODEL = 'common.User'
+
+# Raven app configuration
+
+RAVEN_CONFIG = {
+    'dsn': os.environ['SENTRY_DSN'],
+}
 
 # Timeslots app configuration
 TIMESLOTS_DATE_FORMAT = '%Y-%m-%d'

@@ -8,71 +8,168 @@
 {% endblock %}
 
 {% block content%}
-<form ng-controller="TimeslotCtrl as timeslots">
+<form name="form" ng-controller="TimeslotCtrl as timeslots" novalidate>
             
     <legend></legend>
-    <p><small>Fields denoted with * are mandatory.</small></p>
+    <p><small>Fields denoted with <span class="required">*</span> are required.</small></p>
+    {% csrf_token %}
 
     <section class="row">
-        <aside class="col-xs-3">
-            <label for="country">Country</label>
+        <aside class="col-xs-4">
+            <label for="country">E-mail <span class="required">*</span></label>
         </aside>
-        <section class="col-xs-9">
-            <select name="country" id="country" ng-model="country" ng-options="country.fields.name for country in countries" ng-change="countryChanged()">
+        <section class="col-xs-8">
+            <input name="email" id="email" type="email" ng-model="appointment.email" required />
+        </section>
+    </section>
+
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="country">Country <span class="required">*</span></label>
+        </aside>
+        <section class="col-xs-8">
+            <select name="country" id="country" ng-model="country" ng-options="country.fields.slug as country.fields.name for country in countries" ng-change="countryChanged()" required>
                 <option value="">-- select country --</option>
             </select>
         </section>
     </section>
 
     <section class="row">
-        <aside class="col-xs-3">
-            <label for="city">City</label>
+        <aside class="col-xs-4">
+            <label for="city">City <span class="required">*</span></label>
         </aside>
-        <section class="col-xs-9">
-            <select name="city" id="city" ng-model="city" ng-options="city.fields.name for city in cities" ng-change="cityChanged()">
+        <section class="col-xs-8">
+            <select name="city" id="city" ng-model="appointment.constraint" ng-options="city.fields.slug as city.fields.name for city in cities" ng-change="cityChanged()" required>
                 <option value="">-- select city --</option>
+            </select>
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="date">Date <span class="required">*</span></label>
+        </aside>
+        <section class="col-xs-8">
+            <div style="display:inline-block;">
+                <datepicker name="action" id="action" ng-model="appointment.date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" required class="well well-sm"></datepicker>
+            </div>
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="time">Time <span class="required">*</span></label>
+        </aside>
+        <section class="col-xs-8">
+            <select name="time" id="time" ng-model="appointment.time" ng-options="timeslot for timeslot in timeslots" required>
+                <option value="">-- select timeslot --</option>
             </select>
         </section>
     </section>
 
     <section class="row">
-        <aside class="col-xs-3">
-            <label for="action">Action</label>
+        <aside class="col-xs-4">
+            <label for="action">Action <span class="required">*</span></label>
         </aside>
-        <section class="col-xs-9">
-            <select name="action" id="action" ng-model="action" ng-options="action.fields.name for action in actions">
+        <section class="col-xs-8">
+            <select name="action" id="action" ng-model="appointment.action" ng-options="action.fields.slug as action.fields.name for action in actions" required>
                 <option value="">-- select action --</option>
             </select>
         </section>
     </section>
     
     <section class="row">
-        <aside class="col-xs-3">
-            <label for="date">Date</label>
+        <aside class="col-xs-4">
+            <label for="first_name">First name</label>
         </aside>
-        <section class="col-xs-9">
-            <div style="display:inline-block;">
-                <datepicker name="action" id="action" ng-model="date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" class="well well-sm"></datepicker>
-            </div>
+        <section class="col-xs-8">
+            <input name="first_name" id="first_name" ng-model="appointment.first_name" />
         </section>
     </section>
     
     <section class="row">
-        <aside class="col-xs-3">
-            <label for="time">Time:</label>
+        <aside class="col-xs-4">
+            <label for="last_name">Last name</label>
         </aside>
-        <section class="col-xs-9">
-            <select name="time" id="time" ng-model="time" ng-options="timeslot for timeslot in timeslots">
-                <option value="">-- select timeslot --</option>
+        <section class="col-xs-8">
+            <input name="last_name" id="last_name" ng-model="appointment.last_name" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="nationality">Nationality</label>
+        </aside>
+        <section class="col-xs-8">
+            <input name="nationality" id="nationality" ng-model="appointment.nationality" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="sex">Sex</label>
+        </aside>
+        <section class="col-xs-8">
+            <select name="sex" id="sex" ng-model="appointment.sex">
+                <option value="">-- select gender --</option>
+                <option value="male">Male</option>
+                <option value="femail">Female</option>
             </select>
         </section>
     </section>
     
     <section class="row">
-        <aside class="col-xs-3">
+        <aside class="col-xs-4">
+            <label for="identity_number">Identity number</label>
         </aside>
-        <section class="col-xs-9">
-            <input type="submit" />
+        <section class="col-xs-8">
+            <input name="identity_number" id="identity_number" ng-model="appointment.identity_number" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="document_number">Document number</label>
+        </aside>
+        <section class="col-xs-8">
+            <input name="document_number" id="document_number" ng-model="appointment.document_number" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="phone_number">Phone number</label>
+        </aside>
+        <section class="col-xs-8">
+            <input name="phone_number" id="phone_number" ng-model="appointment.phone_number" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="mobile_number">Mobile number</label>
+        </aside>
+        <section class="col-xs-8">
+            <input name="mobile_number" id="mobile_number" ng-model="appointment.mobile_number" />
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+            <label for="comment">Comment</label>
+        </aside>
+        <section class="col-xs-8">
+            <textarea name="comment" id="comment" ng-model="appointment.comment"></textarea>
+        </section>
+    </section>
+    
+    <section class="row">
+        <aside class="col-xs-4">
+        </aside>
+        <section class="col-xs-8">
+            <button ng-click="submit()" ng-disabled="form.$invalid">Submit</button>
+            <button>Reset</button>
+            <p class="invalid" ng-hide="!form.$invalid"><small>Please check that you've entered all required information.</small></p>
         </section>
     </section>
     

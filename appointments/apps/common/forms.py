@@ -9,8 +9,11 @@ class AppointmentForm(forms.ModelForm):
     class Meta:
         # exclude = []
         model = Appointment
-        
+
+
     
 class ReminderForm(forms.Form):
+
+    # Validate e-mail; check that this user exists
 
     email = forms.EmailField(label=_("e-mail address"), required=True)
