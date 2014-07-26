@@ -7,7 +7,7 @@
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     }]);
     
-    app.controller('TimeslotCtrl', ['$scope', '$http', '$log', function($scope, $http, $log) {
+    app.controller('TimeslotCtrl', ['$scope', '$http', '$window', '$log', function($scope, $http, $window, $log) {
 
         // Country
         $scope.clearCountry = function() {
@@ -65,19 +65,20 @@
 
         // Date
         $scope.clearDate = function() {
+            // I need a naive date; js Date isn't; I'll convert it naively upon form submission.
+            $scope.date = undefined;
             $scope.datetimes = null;
             $scope.mindate = undefined;
             $scope.maxdate = undefined;
-            $scope.appointment.date = undefined;
             $scope.clearTime();
         }
             
 
         $scope.dateChanged = function() {
             $scope.clearTime();
-            if (undefined === $scope.appointment.date) {
+            if (undefined === $scope.date) {
             } else {
-                key = $scope.keyForDate($scope.appointment.date)
+                key = $scope.keyForDate($scope.date)
                 $scope.timeslots = $scope.datetimes.data[key].timeslots.sort();
             }
         }
@@ -131,9 +132,12 @@
         
         // Submit
         $scope.submit = function() {
-            $http.post('/', $scope.appointment).
+            // Convert my Date object naively...
+            $scope.appointment.date = $scope.keyForDate($scope.date);
+            // $log.log($scope.appointment);
+            $http.post('/book/', $scope.appointment).
                 success(function(data, status, headers, config) {
-                    // $log.log(data);
+                    $window.location.href = '/finish/';
                 }).
                 error(function(data, status, headers, config) {
                 });

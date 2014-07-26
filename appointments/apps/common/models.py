@@ -29,38 +29,60 @@ class Appointment(models.Model):
             ('CA', 'cancelled'),            
         ])
         
+    def is_pending(self):
+        return 'PE' == self.status
+        
+    @property
+    def pending(self):
+        return self.is_pending()
+
     def cancel(self, commit=True):
         self.status = 'CA';
         if commit:
             self.save()
+
+    def is_cancelled(self):
+        return 'CA' == self.status
+            
+    @property
+    def cancelled(self):
+        return self.is_cancelled()
  
     def confirm(self, commit=True):
         self.status = 'CO';
         if commit:
             self.save()
+            
+    def is_confirmed(self):
+        return 'CO' == self.status
+    
+    @property
+    def confirmed(self):
+            return self.is_confirmed()
+    
 
     # Optional fields
-    first_name = models.CharField(max_length=64, blank=True,
+    first_name = models.CharField(max_length=64, blank=True, null=True,
         verbose_name=_('first name'))
-    last_name = models.CharField(max_length=64, blank=True,
+    last_name = models.CharField(max_length=64, blank=True, null=True,
         verbose_name=_('last name'))
-    nationality = models.CharField(max_length=32, blank=True,
+    nationality = models.CharField(max_length=32, blank=True, null=True,
         verbose_name=_('nationality'))
-    sex = models.CharField(max_length=1, blank=True,
+    sex = models.CharField(max_length=1, blank=True, null=True,
         choices=(('M', _('Male')), ('F', _('Female')),),
         verbose_name=_('sex'))
         
-    identity_number = models.CharField(max_length=64, blank=True,
+    identity_number = models.CharField(max_length=64, blank=True, null=True,
         verbose_name=_('identity number'))
-    document_number = models.CharField(max_length=64, blank=True,
+    document_number = models.CharField(max_length=64, blank=True, null=True,
         verbose_name=_('document number'))
     
-    phone_number = models.CharField(max_length=16, blank=True,
+    phone_number = models.CharField(max_length=16, blank=True, null=True,
         verbose_name=_('phone number'))
-    mobile_number = models.CharField(max_length=16, blank=True,
+    mobile_number = models.CharField(max_length=16, blank=True, null=True,
         verbose_name=_('mobile number'))
 
-    comment = models.TextField(blank=True,
+    comment = models.TextField(blank=True, null=True,
         verbose_name=_('comment'))    
 
     # Audit fields
@@ -165,8 +187,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def get_full_name(self):
-        # The user is identified by their email address
-        return self.email
+        return "%s %s" % (self.first_name, self.last_name)
 
     def get_short_name(self):
         # The user is identified by their email address

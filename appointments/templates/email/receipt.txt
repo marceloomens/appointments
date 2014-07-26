@@ -1,0 +1,17 @@
+Dear Sir or Madam,
+
+You scheduled an appointment in {{ appointment.constraint.name }} on {{ appointment.date }} at {{ appointment.time }} o'clock.
+
+To CONFIRM this appointment please click on the confirmation link below:
+{{ urls.confirm }}
+
+To CANCEL this appointment please click on the cancellation link below:
+{{ urls.cancel }}
+
+Yours kindly,
+
+
+Royal Dutch Embassy to China
+#4 Liangmahe Nanlu,
+100600, Beijing, Chaoyang
+People’s Republic of China

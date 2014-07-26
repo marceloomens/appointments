@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third-party apps
@@ -53,6 +54,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'appointments.urls'
+
+SITE_ID = 1
 
 WSGI_APPLICATION = 'appointments.wsgi.application'
 
@@ -83,9 +86,31 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
+# Messages framework
+
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG     : 'bg-primary',
+    message_constants.INFO      : 'bg-info',
+    message_constants.SUCCESS   : 'bg-success',
+    message_constants.WARNING   : 'bg-warning',
+    message_constants.ERROR     : 'bg-danger',
+}
+
 # Auth app configuration
 
 AUTH_USER_MODEL = 'common.User'
+
+# Postmark confiruration
+POSTMARK_API_KEY    = os.environ['POSTMARK_API_KEY']
+POSTMARK_SENDER     = 'appointments@marceloomens.com'
+POSTMARK_TEST_MODE  = False
+
+DEFAULT_FROM_EMAIL  = POSTMARK_SENDER
+SERVER_EMAIL        = POSTMARK_SENDER
+
+EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
 
 # Raven app configuration
 

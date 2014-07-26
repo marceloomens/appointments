@@ -10,7 +10,6 @@ class AppointmentForm(forms.ModelForm):
         # exclude = []
         model = Appointment
 
-
     
 class ReminderForm(forms.Form):
 

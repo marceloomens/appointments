@@ -1,0 +1,12 @@
+{% extends 'common.html' %}
+
+{% block header %}
+<h1>Cancel appointment</h1>
+<p>Are you sure you want to cancel your appointment?</p>
+{% include 'messages.html' %}
+<form method="post" action="">
+    {% csrf_token %}
+    <input type="submit" value="Cancel">
+</form>
+
+{% endblock %}

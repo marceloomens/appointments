@@ -1,0 +1,12 @@
+Dear {{ report.user.get_full_name }},
+
+Here's a list of scheduled appointments:
+
+{% for appointment in appointments %}
+* {{ appointment.date|date:"D, d M Y" }} at {{ appointment.time|time:"H:i" }} > {{ appointment.user.email }} > {{ appointment.action.name }}
+{% endfor %}
+
+Yours kindly,
+
+
+The appointments system

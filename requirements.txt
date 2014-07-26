@@ -1,6 +1,11 @@
 Django==1.6.5
+amqp==1.4.5
+anyjson==0.3.3
+billiard==3.3.0.18
+celery==3.1.13
 itsdangerous==0.24
 jsonfield==0.9.20
+kombu==3.0.21
 python-dateutil==2.2
 python-postmark==0.4.3
 pytz==2014.4
