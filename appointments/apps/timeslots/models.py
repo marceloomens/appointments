@@ -17,7 +17,7 @@ class Action (models.Model):
         verbose_name_plural =  _("actions")
     
     def __unicode__(self):
-        return  "<Action: %s>" % (self.name)
+        return  "%s" % (self.name)
 
 
 class ConstraintSet (models.Model):
@@ -32,7 +32,7 @@ class ConstraintSet (models.Model):
         verbose_name_plural =  _("countries")
     
     def __unicode__(self):
-        return  "<Country: %s>" % (self.name)
+        return  "%s" % (self.name)
             
             
 class Constraint (models.Model):
@@ -50,7 +50,7 @@ class Constraint (models.Model):
         verbose_name_plural =  _("cities")
         
     def __unicode__(self):
-        return "<City: %s, %s>" % (self.name, self.key.name)
+        return "%s, %s" % (self.name, self.key.name)
 
 
 class Definition (models.Model):
@@ -71,7 +71,7 @@ class Definition (models.Model):
         verbose_name_plural = _("timeslots")
         
     def __unicode__(self):
-        return "<Definition id=%s>" % (self.pk)
+        return "Definition id=%s" % (self.pk)
         
         
 class Holiday (models.Model):
@@ -88,4 +88,4 @@ class Holiday (models.Model):
         verbose_name_plural =  _("holiday")
         
     def __unicode__(self):
-        return "<Holiday id=%s>" % (self.pk)    
+        return "Holiday id=%s" % (self.pk)    

@@ -1,5 +1,6 @@
+{% load common_filters %}
 <p>Dear {{ report.user.get_full_name }},</p>
-<p>Here's a list of scheduled appointments:</p>
+<p>Here's the report that you requested:</p>
 <table border="1">
 <tr>
     <th>Date</th>
@@ -7,6 +8,7 @@
     <th>E-mail</th>
     <th>Action</th>
     <th>Status</th>
+    <th>More&hellip;</th>
 </tr>
 {% for appointment in appointments %}
 <tr>
@@ -15,11 +17,13 @@
 <td>{{ appointment.user.email }}</td>
 <td>{{ appointment.action.name }}</td>
 <td>{{ appointment.status }}</td>
+<td><a href="{{ appointment|changeform }}" title="More information about this appointment">More&nbsp;&rarr;</a></td>
 </tr>
 {% empty %}
-<tr><td colspan="5">Looks like a quite day at the office. No appointment!</td></tr>
+<tr><td colspan="6">Looks like a quite day at the office. No appointments here!</td></tr>
 {% endfor %}
 </table>
+<p>You can also log into the <a href="{{ 'admin:index'|absurl }}" title="Appointments manager">appointments manager</a> for a list of scheduled appointments</p>
 <p>Yours kindly,</p>
 <p>&nbsp;</p>
 <p>The appointments system</p>

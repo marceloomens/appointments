@@ -1,13 +1,10 @@
 from django.conf import settings
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from urlparse import urlunsplit
 from itsdangerous import URLSafeSerializer
 
 from appointments.apps.timeslots.signals import willEvaluateAvailabilityForRange
@@ -46,24 +43,22 @@ def get_serializer(secret_key=None):
 
 ### SENDING EMAIL ###
 
-def __parse_request(request):
-    scheme = 'https' if request.is_secure() else 'http'
-    # Use the Sites framework to obtain the host
-    site = Site.objects.get(pk=settings.SITE_ID)
-    host = site.domain
-    return (scheme, host)
-
 def send_confirmation(request, appointment):
-    pass
-
-def send_receipt(request, appointment):
-    scheme, host = __parse_request(request)
-    urls = {
-            'confirm': urlunsplit([scheme, host, reverse('confirm', kwargs={'payload': appointment.get_url_safe_key()}),'','']),
-            'cancel' : urlunsplit([scheme, host, reverse('cancel', kwargs={'payload': appointment.get_url_safe_key()}),'','']),
+    t = get_template('email/confirmation.txt')
+    # h = get_template('email/confirmation.html')
+    c = Context({'appointment': appointment,})
+    payload = {
+            'to'        : appointment.user.email,
+            'subject'   : _("Appointment confirmation"),
+            'text_body' : t.render(c),
+            # 'html_body' : h.render(c),
         }
+    send_mail.delay(**payload) if getattr(settings, 'SEND_MAIL_ASYNC', False) else send_mail(**payload)
+
+def send_receipt(appointment):
     t = get_template('email/receipt.txt')
-    c = Context({'appointment': appointment, 'urls': urls})
+    # h = get_template('email/receipt.html')
+    c = Context({'appointment': appointment,})
     payload = {
             'to'        : appointment.user.email,
             'subject'   : _("Please confirm your appointment"),
@@ -71,15 +66,27 @@ def send_receipt(request, appointment):
             # 'html_body' : h.render(c),
         }
     send_mail.delay(**payload) if getattr(settings, 'SEND_MAIL_ASYNC', False) else send_mail(**payload)
-    
-def send_report(request, report, appointments=None):
+
+def send_reminder(user, appointments):
+    t = get_template('email/reminder.txt')
+    # h = get_template('email/reminder.html')
+    c = Context({'appointments': appointments})
+    payload = {
+            'to'        : user.email,
+            'subject'   : _("Reminder of your appointments"),
+            'text_body' : t.render(c),
+            # 'html_body'  : h.render(c),
+        }
+    send_mail.delay(**payload) if getattr(settings, 'SEND_MAIL_ASYNC', False) else send_mail(**payload)
+
+def send_report(report, appointments=None):
     # If appointments = None then generate today's report
     if not appointments:
         date = timezone.now().date()
         appointments = Appointment.objects.filter(constraint=report.constraint, date=date).order_by('time')
     t = get_template('email/report.txt')
     h = get_template('email/report.html')
-    c = Context({'report': report, 'appointments': appointments})
+    c = Context({'report': report, 'appointments': appointments,})
     payload = {
             'to'        : report.user.email,
             'subject'   : _("Report of appointments"),

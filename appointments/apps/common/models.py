@@ -104,7 +104,7 @@ class Appointment(models.Model):
         verbose_name_plural = _("appointments")
     
     def __unicode__(self):
-        return "<Appointment object: user=%s>" % (self.user.get_short_name())
+        return "Appointment id=%s" % (self.pk)
 
 
 class Report(models.Model):
@@ -121,6 +121,9 @@ class Report(models.Model):
         ])
     
     enabled = models.BooleanField(default=True)
+    
+    def __unicode__(self):
+        return "Report id=%s" % (self.pk)
 
 
 # Custom user model implementation; uses e-mail for unique id/username
@@ -194,7 +197,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __unicode__(self):
-        return "<User object: %s>" % (self.email)
+        return "%s" % (self.email)
 
     @property
     def is_staff(self):

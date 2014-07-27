@@ -1,0 +1,14 @@
+Dear Sir or Madam,
+
+Here's an overview of your appointments:
+
+{% for appointment in appointments %}
+* {{ appointment.action.name }} in {{ appointment.constraint.name }} on {{ appointment.date }} at {{ appointment.time }} o'clock.
+{% empty %}
+* No upcoming appointments.
+{% endfor %}
+
+Yours kindly,
+
+
+The appointments system

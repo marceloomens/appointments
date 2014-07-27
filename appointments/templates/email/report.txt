@@ -1,10 +1,10 @@
+{% load common_filters %}
 Dear {{ report.user.get_full_name }},
 
-Here's a list of scheduled appointments:
+Please log into the appointment manager for a list of scheduled appointments. Alternatively use e-mail software that can display e-mail is HTML mark-up.
 
-{% for appointment in appointments %}
-* {{ appointment.date|date:"D, d M Y" }} at {{ appointment.time|time:"H:i" }} > {{ appointment.user.email }} > {{ appointment.action.name }}
-{% endfor %}
+Appointment manager:
+{{ 'admin:index'|absurl }}
 
 Yours kindly,
 

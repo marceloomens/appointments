@@ -9,6 +9,7 @@ from .models import Appointment, Report, User
 
 class AppointmentAdmin(admin.ModelAdmin):
 
+    date_hierarchy = 'date'
     fieldsets = (
         (None, {'fields': ('user', 'constraint', 'date', 'time', 'action', 'status')}),
         ('Additional information', {'fields': ('first_name', 'last_name', 'nationality', 'sex',
@@ -18,6 +19,8 @@ class AppointmentAdmin(admin.ModelAdmin):
             'classes': ('collapse',)}),
     )   
     list_display = ('user', 'constraint', 'date', 'time', 'status')
+    list_filter = ('status', 'constraint')
+    ordering = ('-date', 'time')
     readonly_fields = ('modified', 'created')
 
 

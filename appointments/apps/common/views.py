@@ -4,6 +4,7 @@ from django.forms import Form
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 import dateutil.parser, json
@@ -15,7 +16,7 @@ from appointments.apps.timeslots.utils import strptime
 
 from .forms import ReminderForm
 from .models import Appointment, User
-from .utils import get_serializer, send_receipt
+from .utils import get_serializer, send_confirmation, send_receipt, send_reminder
 
 # Create your views here.
 
@@ -81,7 +82,7 @@ def book(request):
         # Save the appointment
         appointment.save()
         
-        send_receipt(request, appointment)
+        send_receipt(appointment)
         messages.success(request, _("We've send you an e-mail receipt. Please confirm your appointment by following the instructions."))
 
         # Return some JSON...
@@ -133,7 +134,8 @@ def confirm(request, payload):
         messages.warning(request, _("Thank you, no need to reconfirm."))        
     else:
         appointment.confirm()
-        appointment.user.verify()        
+        appointment.user.verify()
+        send_confirmation(appointment)    
         messages.success(request, _("Thank you for confirming your appointment."))
 
     return redirect('finish')
@@ -142,7 +144,17 @@ def reminder(request):
     if 'POST' == request.method:
         form = ReminderForm(request.POST)
         if form.is_valid():
-            # Send the reminder
+            email = form.cleaned_data['email']
+            try:
+                user = User.objects.get(email=email)
+                date = timezone.now().date()
+                appointments = user.appointments.filter(date__gte=date)
+                send_reminder(user, appointments)
+                
+            except User.DoesNotExist:
+                pass
+
+            messages.success(request, _("We'll send you an e-mail with all your appointments."))
             return redirect('finish')
 
     else:
