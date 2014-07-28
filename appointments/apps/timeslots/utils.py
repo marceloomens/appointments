@@ -48,11 +48,17 @@ def __timeslots_generator(lbound, ubound, constraint):
     # Select all definitions in the date rage
     future_set = definitions.filter(valid__range=(lbound, ubound))
     current = definitions.filter(valid__lt=lbound).order_by('-valid')[:1]
+
     # Union of the current definition and all future definitions in the date
     # range. The union operator | may set me up for all sorts of associativity
     # problems. writing (current | future_set) throws AssertionError: Cannot
     # combine queries once a slice has been taken
-    definitions = (future_set | current).distinct().order_by('valid')
+    
+    # There's no risk of getting duplicate rows, so I should be able to drop the
+    # call to distinct('id'). only PostgreSQL supports DISTINCT ON
+
+    # definitions = (future_set | current).distinct('id').order_by('valid')
+    definitions = (future_set | current).order_by('valid')
     
     # Raise warnings if definitions is over- or underspecified
     
