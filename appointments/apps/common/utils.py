@@ -43,7 +43,7 @@ def get_serializer(secret_key=None):
 
 ### SENDING EMAIL ###
 
-def send_confirmation(request, appointment):
+def send_confirmation(appointment):
     t = get_template('email/confirmation.txt')
     # h = get_template('email/confirmation.html')
     c = Context({'appointment': appointment,})
