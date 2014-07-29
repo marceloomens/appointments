@@ -12,7 +12,7 @@ import dateutil.parser, json
 from itsdangerous import BadSignature
 
 from appointments.apps.timeslots.models import Action, Constraint
-from appointments.apps.timeslots.utils import strptime
+from appointments.apps.timeslots.utils import strptime, is_available
 
 from .forms import ReminderForm
 from .models import Appointment, User
@@ -56,10 +56,17 @@ def book(request):
             time = strptime(fields['time'])
         except KeyError:
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest        
+            return HttpResponseBadRequest
         
         # Check if timeslot is available
-        # Best to preprocess sex
+        if not is_available(constraint, date, time):
+            # Return some meaningful JSON to say that time is not available
+            return HttpResponseBadRequest            
+        
+        # Preprocess sex to ensure it's a valid value
+        sex = fields['sex'][0].upper() if fields.get('sex', None) else None
+        if sex not in ['M', 'F']:
+            sex is None
         
         appointment = Appointment(
                 user=user,
@@ -71,7 +78,7 @@ def book(request):
                 first_name=fields.get('first_name', None),
                 last_name=fields.get('last_name', None),
                 nationality=fields.get('nationality', None),
-                sex=fields['sex'][0].upper() if fields.get('sex', None) else None,
+                sex=sex,
                 identity_number=fields.get('identity_number', None),
                 document_number=fields.get('document_number', None),
                 phone_number=fields.get('phone_number', None),

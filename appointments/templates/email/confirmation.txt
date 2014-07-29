@@ -5,7 +5,7 @@ You scheduled an appointment in {{ appointment.constraint.name }} on {{ appointm
 
 Action: {{ appointment.action.name }}
 
-This appointment is not confirmed. No further action is required on your part, we look forward to seeing you in {{ appointment.constraint.name }} at the agreed upon time.
+This appointment is now confirmed. No further action is required on your part, we look forward to seeing you in {{ appointment.constraint.name }} at the agreed upon time.
 
 You can still cancel this appointment. To CANCEL please click on the cancellation link below:
 {{ appointment|cancel }}

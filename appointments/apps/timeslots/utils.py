@@ -19,27 +19,18 @@ def strptime(time):
     return datetime.strptime(time, settings.TIMESLOTS_TIME_FORMAT).time()
 
 
+WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
 
 def __get_timeslots(date, definition):
     # Return timeslots for date given definition
-    # Implement a caching strategy (map definition to parsed data)
     if date < definition.valid:
         raise ValueError('out of bounds')
     if definition.until and date > definition.until:
         raise ValueError('out of bounds')
-        
-    WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday',
-        'friday', 'saturday', 'sunday']
-    defaults = definition.json.get('defaults', None)
-    timeslots = {
-                weekday: { strptime(t): a for (t, a) in definition.json.get(weekday, defaults).items() }
-                if definition.json.get(weekday, defaults)
-                else []
-            for weekday in WEEKDAYS
-        }
 
     from copy import copy
-    return copy(timeslots[WEEKDAYS[date.weekday()]])
+    return copy(definition.timeslots[WEEKDAYS[date.weekday()]])
     
 def __timeslots_generator(lbound, ubound, constraint):
     
@@ -127,4 +118,36 @@ def availability(lbound, ubound, constraint):
                     'timeslots' : [],
                 }
 
-        yield date, data  
+        yield date, data
+
+    
+def is_available(constraint, date, time):
+    # Not available if date is a holiday
+    if constraint.holidays.filter(date=date).count() > 0:
+        return False
+
+    # Create a timeslots generator for date only
+    generator = __timeslots_generator(date, date, constraint)
+    timeslots = generator(date)
+    if not timeslots:
+        return False
+
+    # I can reduce the size of timeslots to time (but my callback may throw a warning)
+    if time not in timeslots:
+        return False
+    timeslots = {time: timeslots[time]}
+    
+    # Allow signal listeners to register callback function
+    callbacks = rangeSignal.send(__name__, lbound=date, ubound=date, constraint=constraint)
+    for (receiver, callback) in callbacks:
+        try:
+            callback(date, timeslots)
+        except Exception as e:
+            import logging
+            l = logging.getLogger(__name__)
+            l.warning("willEvaluateAvailabilityForRange callback threw an exception.", extra=e)
+    
+    if timeslots[time] < 1:
+        return False
+    
+    return True

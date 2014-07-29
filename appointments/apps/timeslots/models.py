@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
@@ -64,6 +65,17 @@ class Definition (models.Model):
     until = models.DateField(_("until"), blank=True, null=True, default=None, editable=False)    
     
     enabled = models.BooleanField(default=True)
+    
+    @cached_property
+    def timeslots(self):
+        from .utils import WEEKDAYS, strptime
+        defaults = self.json.get('defaults', None)
+        return {
+                weekday: { strptime(t): a for (t, a) in self.json.get(weekday, defaults).items() }
+                    if self.json.get(weekday, defaults)
+                    else []
+                for weekday in WEEKDAYS
+            }
     
     class Meta:
         ordering = ['-valid']

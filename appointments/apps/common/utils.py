@@ -29,6 +29,7 @@ def availability_for_range_handler(sender, **kwargs):
                     timeslots[appointment.time] -= 1
                 else:
                     # Throw a warning, this should never happen after all...
+                    # THIS MIGHT HAPPEN WHEN CALLED FROM IS_AVAILABLE
                     import logging
                     l = logging.getLogger(__name__)
                     l.warning("Encountered booking for non-existing timeslot.", extra={'appointment_id': appointment.pk})
