@@ -83,6 +83,25 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
+# Auth app configuration
+
+AUTH_USER_MODEL = 'common.User'
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+    },
+    'filters': {
+    },
+    'handlers': {
+    },
+    'loggers': {
+    },
+}
+
 # Messages framework
 
 from django.contrib.messages import constants as message_constants
@@ -94,10 +113,6 @@ MESSAGE_TAGS = {
     message_constants.WARNING   : 'bg-warning',
     message_constants.ERROR     : 'bg-danger',
 }
-
-# Auth app configuration
-
-AUTH_USER_MODEL = 'common.User'
 
 # Postmark confiruration
 POSTMARK_API_KEY    = os.environ['POSTMARK_API_KEY']
