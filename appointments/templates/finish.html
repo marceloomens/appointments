@@ -1,8 +1,12 @@
 {% extends 'common.html' %}
 
 {% block header %}
-<h1>Thank you</h1>
+<h3>Thank you</h3>
 {% include 'messages.html' %}
+{% endblock %}
+
+{% block content%}
+
 <p>You can now close this browser window.</p>
 <ul>
     <li><a href="{% url 'home' %}" title="Book another appointment">Book another appointment&nbsp;&rarr;</a></li>

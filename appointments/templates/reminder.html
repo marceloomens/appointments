@@ -1,36 +1,33 @@
 {% extends 'common.html' %}
 
 {% block header %}
-<h1>Request a reminder</h1>
+<h3>Request a reminder</h3>
 <p>Receive an e-mail reminder of your future appointments.</p>
 {% include 'messages.html' %}
 {% endblock %}
 
 {% block content%}
-<form action="{% url 'reminder' %}" method="post">
+<form class="form-horizontal" action="{% url 'reminder' %}" method="post">
 
     <legend></legend>
-    <p><small>Fields denoted with * are mandatory.</small></p>
+    <p class="text-right"><small>Fields denoted with <span class="required">*</span> are mandatory.</small></p>
 
     {% csrf_token %}
 
-    {% for field in form %}
-    <section class="row">
-        <aside class="col-xs-3">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        </aside>
-        <section class="col-xs-9">
-            {{ field }}
-        </section>
+    {% with field=form.email %}
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="email">{{ field.label }}</label>
+        <div class="col-xs-8">
+             <input name="{{ field.html_name }}" id="email" type="email" class="form-control" required />
+        </div>
     </section>
-    {% endfor %}
+    {% endwith %}
     
-    <section class="row">
-        <aside class="col-xs-3">
-        </aside>
-        <section class="col-xs-9">
-            <input type="submit" />
-        </section>
+    <section class="form-group">
+        <aside class="col-xs-4"></aside>
+        <div class="col-xs-8">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </section>
     
 </form>

@@ -20,21 +20,3 @@ tbody .btn-default {
     background-color: #efe;
     border-color: #090;
 }
-
-a:link { color: #154273; text-decoration: none; }
-a:visited { color: #696969; }
-a:hover, a:visited:hover, a:active, a:focus { color: #0162cd; text-decoration: underline; }
-
-h1, h2, h3, h4 { 
-    font-weight: normal; 
-    line-height: 1.2;
-}
-
-h1 { font-size: 1.6em; }
-h2 { font-size: 1.4em; }
-h3 { font-size: 1.2em; }
-h4 { font-size: 1.1em;}
-
-input.ng-invalid.ng-dirty, select.ng-invalid.ng-dirty { }
-
-input.ng-valid.ng-dirty, select.ng-valid.ng-dirty { }

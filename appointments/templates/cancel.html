@@ -1,12 +1,25 @@
 {% extends 'common.html' %}
 
 {% block header %}
-<h1>Cancel appointment</h1>
+<h3>Cancel appointment</h3>
 <p>Are you sure you want to cancel your appointment?</p>
 {% include 'messages.html' %}
-<form method="post" action="">
+{% endblock %}
+
+{% block content%}
+<form class="form-horizontal" method="post" action="">
+
+    <legend></legend>
+
     {% csrf_token %}
-    <input type="submit" value="Cancel">
+
+    <section class="form-group">
+        <aside class="col-xs-4"></aside>
+        <div class="col-xs-8">
+            <button type="submit" class="btn btn-danger">Submit</button>
+        </div>
+    </section>
+
 </form>
 
 {% endblock %}

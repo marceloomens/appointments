@@ -1,17 +1,20 @@
-{% extends 'angular.html' %}
+{% extends 'common.html' %}
+{% load i18n staticfiles %}
 
-{% block header %}
-<h1>Schedule an appointment</h1>
-<ul>
-    <li><a href="{% url 'reminder' %}" title="Remind me of my upcoming appointments">Remind me of my upcoming appointments&nbsp;&rarr;</a></li>
-</ul>
+{% block ng_app %} ng-app="timeslots"{% endblock %}
+
+{% block head %}
+    <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.min.js' %}"></script>
+    <script src="{% static 'js/timeslots.js' %}"></script>
 {% endblock %}
 
 {% block content%}
 <form name="form" role="form" ng-controller="TimeslotCtrl as timeslots" novalidate class="form-horizontal">
             
     <legend></legend>
-    <p><small>Fields denoted with <span class="required">*</span> are required.</small></p>
+    <p class="text-right"><small>Fields denoted with <span class="required">*</span> are required.</small></p>
+
     {% csrf_token %}
 
     <section class="form-group" ng-class="{'has-success has-feedback': form.email.$valid && form.email.$dirty, 'has-error has-feedback': form.email.$invalid && form.email.$dirty}">
@@ -137,13 +140,12 @@
     </section>
     
     <section class="form-group">
-        <aside class="col-xs-4">
-        </aside>
-        <section class="col-xs-8">
+        <aside class="col-xs-4"></aside>
+        <div class="col-xs-8">
             <button type="button" class="btn btn-primary" ng-click="submit()" ng-disabled="form.$invalid">Submit</button>
             <button type="button" class="btn btn-danger" disabled>Reset</button>
             <p class="invalid text-danger" ng-hide="!form.$invalid"><small>Please check that you've entered all required information.</small></p>
-        </section>
+        </div>
     </section>
     
 </form>
