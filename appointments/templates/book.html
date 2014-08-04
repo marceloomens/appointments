@@ -8,168 +8,141 @@
 {% endblock %}
 
 {% block content%}
-<form name="form" ng-controller="TimeslotCtrl as timeslots" novalidate>
+<form name="form" role="form" ng-controller="TimeslotCtrl as timeslots" novalidate class="form-horizontal">
             
     <legend></legend>
     <p><small>Fields denoted with <span class="required">*</span> are required.</small></p>
     {% csrf_token %}
 
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="country">E-mail <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="email" id="email" type="email" ng-model="appointment.email" required />
-        </section>
+    <section class="form-group" ng-class="{'has-success has-feedback': form.email.$valid && form.email.$dirty, 'has-error has-feedback': form.email.$invalid && form.email.$dirty}">
+            <label class="col-xs-4 control-label" for="country">E-mail <span class="required">*</span></label>
+            <div class="col-xs-8">
+                <input name="email" id="email" type="email" class="form-control" ng-model="appointment.email" required />
+                <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.email.$valid && form.email.$dirty"></span>
+                <span class="glyphicon glyphicon-remove form-control-feedback" ng-show="form.email.$invalid && form.email.$dirty"></span>
+            </div>
     </section>
 
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="country">Country <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
-            <select name="country" id="country" ng-model="country" ng-options="country.fields.slug as country.fields.name for country in countries" ng-change="countryChanged()" required>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="country">Country <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <select name="country" id="country" class="form-control" ng-model="country" ng-options="country.fields.slug as country.fields.name for country in countries" ng-change="countryChanged()" required>
                 <option value="">-- select country --</option>
             </select>
-        </section>
+        </div>
     </section>
 
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="city">City <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
-            <select name="city" id="city" ng-model="appointment.constraint" ng-options="city.fields.slug as city.fields.name for city in cities" ng-change="cityChanged()" required>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="city">City <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <select name="city" id="city" class="form-control" ng-model="appointment.constraint" ng-options="city.fields.slug as city.fields.name for city in cities" ng-change="cityChanged()" required>
                 <option value="">-- select city --</option>
             </select>
-        </section>
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="date">Date <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="date">Date <span class="required">*</span></label>
+        <div class="col-xs-8">
             <div style="display:inline-block;">
                 <div datepicker name="action" id="action" ng-model="date" ng-change="dateChanged()" min-date="mindate" max-date="maxdate" max-mode="day" date-disabled="disabled(date, mode)" show-weeks="true" required class="well well-sm"></div>
             </div>
-        </section>
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="time">Time <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
-            <select name="time" id="time" ng-model="appointment.time" ng-options="timeslot for timeslot in timeslots" required>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="time">Time <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <select name="time" id="time" class="form-control" ng-model="appointment.time" ng-options="timeslot for timeslot in timeslots" required>
                 <option value="">-- select timeslot --</option>
             </select>
-        </section>
+        </div>
     </section>
 
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="action">Action <span class="required">*</span></label>
-        </aside>
-        <section class="col-xs-8">
-            <select name="action" id="action" ng-model="appointment.action" ng-options="action.fields.slug as action.fields.name for action in actions" required>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="action">Action <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <select name="action" id="action" class="form-control" ng-model="appointment.action" ng-options="action.fields.slug as action.fields.name for action in actions" required>
                 <option value="">-- select action --</option>
             </select>
-        </section>
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="first_name">First name</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="first_name" id="first_name" ng-model="appointment.first_name" />
-        </section>
+    <section class="form-group" ng-class="{'has-success has-feedback': form.first_name.$valid && form.first_name.$dirty}">
+        <label class="col-xs-4 control-label" for="first_name">First name</label>
+        <div class="col-xs-8">
+            <input name="first_name" id="first_name" class="form-control" ng-model="appointment.first_name" />
+            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.first_name.$valid && form.first_name.$dirty"></span>
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="last_name">Last name</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="last_name" id="last_name" ng-model="appointment.last_name" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="last_name">Last name</label>
+        <div class="col-xs-8">
+            <input name="last_name" id="last_name" class="form-control" ng-model="appointment.last_name" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="nationality">Nationality</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="nationality" id="nationality" ng-model="appointment.nationality" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="nationality">Nationality</label>
+        <div class="col-xs-8">
+            <input name="nationality" id="nationality" class="form-control" ng-model="appointment.nationality" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="sex">Sex</label>
-        </aside>
-        <section class="col-xs-8">
-            <select name="sex" id="sex" ng-model="appointment.sex">
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="sex">Sex</label>
+        <div class="col-xs-8">
+            <select name="sex" id="sex" class="form-control" ng-model="appointment.sex">
                 <option value="">-- select gender --</option>
                 <option value="male">Male</option>
                 <option value="femail">Female</option>
             </select>
-        </section>
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="identity_number">Identity number</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="identity_number" id="identity_number" ng-model="appointment.identity_number" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="identity_number">Identity number</label>
+        <div class="col-xs-8">
+            <input name="identity_number" id="identity_number" class="form-control" ng-model="appointment.identity_number" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="document_number">Document number</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="document_number" id="document_number" ng-model="appointment.document_number" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="document_number">Document number</label>
+        <div class="col-xs-8">
+            <input name="document_number" id="document_number" class="form-control" ng-model="appointment.document_number" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="phone_number">Phone number</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="phone_number" id="phone_number" ng-model="appointment.phone_number" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="phone_number">Phone number</label>
+        <div class="col-xs-8">
+            <input name="phone_number" id="phone_number" class="form-control" ng-model="appointment.phone_number" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="mobile_number">Mobile number</label>
-        </aside>
-        <section class="col-xs-8">
-            <input name="mobile_number" id="mobile_number" ng-model="appointment.mobile_number" />
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="mobile_number">Mobile number</label>
+        <div class="col-xs-8">
+            <input name="mobile_number" id="mobile_number" class="form-control" ng-model="appointment.mobile_number" />
+        </div>
     </section>
     
-    <section class="row">
-        <aside class="col-xs-4">
-            <label for="comment">Comment</label>
-        </aside>
-        <section class="col-xs-8">
-            <textarea name="comment" id="comment" ng-model="appointment.comment"></textarea>
-        </section>
+    <section class="form-group">
+        <label class="col-xs-4 control-label" for="comment">Comment</label>
+        <div class="col-xs-8">
+            <textarea name="comment" id="comment" class="form-control" ng-model="appointment.comment"></textarea>
+        </div>
     </section>
     
-    <section class="row">
+    <section class="form-group">
         <aside class="col-xs-4">
         </aside>
         <section class="col-xs-8">
-            <button ng-click="submit()" ng-disabled="form.$invalid">Submit</button>
-            <button>Reset</button>
-            <p class="invalid" ng-hide="!form.$invalid"><small>Please check that you've entered all required information.</small></p>
+            <button type="button" class="btn btn-primary" ng-click="submit()" ng-disabled="form.$invalid">Submit</button>
+            <button type="button" class="btn btn-danger" disabled>Reset</button>
+            <p class="invalid text-danger" ng-hide="!form.$invalid"><small>Please check that you've entered all required information.</small></p>
         </section>
     </section>
     

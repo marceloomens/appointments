@@ -107,11 +107,11 @@ LOGGING = {
 from django.contrib.messages import constants as message_constants
 
 MESSAGE_TAGS = {
-    message_constants.DEBUG     : 'bg-primary',
-    message_constants.INFO      : 'bg-info',
-    message_constants.SUCCESS   : 'bg-success',
-    message_constants.WARNING   : 'bg-warning',
-    message_constants.ERROR     : 'bg-danger',
+    message_constants.DEBUG     : 'active',
+    message_constants.INFO      : 'info',
+    message_constants.SUCCESS   : 'success',
+    message_constants.WARNING   : 'warning',
+    message_constants.ERROR     : 'danger',
 }
 
 # Postmark confiruration

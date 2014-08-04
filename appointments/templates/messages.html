@@ -1,5 +1,7 @@
 {% if messages %}
+<table class="table"><tbody>
     {% for message in messages %}
-<ul class="{{ message.tags }}"><li>{{ message }}</li></ul>
+    <tr class="{{ message.tags }}"><td>{{ message }}</td></tr>
     {% endfor %}
+</tbody></table>
 {% endif %}
