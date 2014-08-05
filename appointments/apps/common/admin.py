@@ -18,7 +18,7 @@ class AppointmentAdmin(admin.ModelAdmin):
         ('Auditing information', {'fields': ('created', 'modified'),
             'classes': ('collapse',)}),
     )   
-    list_display = ('user', 'constraint', 'date', 'time', 'status')
+    list_display = ('user', 'action', 'constraint', 'date', 'time', 'status')
     list_filter = ('status', 'constraint')
     ordering = ('-date', 'time')
     readonly_fields = ('modified', 'created')

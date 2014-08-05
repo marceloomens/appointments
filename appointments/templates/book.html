@@ -142,7 +142,7 @@
     <section class="form-group">
         <aside class="col-xs-4"></aside>
         <div class="col-xs-8">
-            <button type="button" class="btn btn-primary" ng-click="submit()" ng-disabled="form.$invalid">Submit</button>
+            <button type="button" class="btn btn-primary" ng-click="submit()" ng-disabled="!can_submit()">Submit</button>
             <button type="button" class="btn btn-danger" disabled>Reset</button>
             <p class="invalid text-danger" ng-hide="!form.$invalid"><small>Please check that you've entered all required information.</small></p>
         </div>

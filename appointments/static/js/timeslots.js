@@ -130,16 +130,27 @@
             error(function(data, status, headers, config) { 
         });
         
-        // Submit
+        // FORM SUBMISSION LOGIC
+        $scope.locked = false;
+        
+        $scope.can_submit = function() {
+            return $scope.form.$valid && !$scope.locked;
+        }
+        
         $scope.submit = function() {
+            // Lock the scope to prevent double submissions
+            $scope.locked = true
             // Convert my Date object naively...
             $scope.appointment.date = $scope.keyForDate($scope.date);
             // $log.log($scope.appointment);
+            return;
             $http.post('/book/', $scope.appointment).
                 success(function(data, status, headers, config) {
                     $window.location.href = '/finish/';
                 }).
                 error(function(data, status, headers, config) {
+                    // Unlock the scope, allow people to resubmit
+                    $scope.locked = false;
                 });
         }
 
