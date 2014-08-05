@@ -15,8 +15,7 @@ body {
 header { margin-bottom: 20px; }
 footer { margin-top: 20px; }
 
-/* STYLE THE DATEPICKER */
 tbody .btn-default {
-    background-color: #efe;
-    border-color: #090;
+    border: 1px solid rgb(60, 118, 61);
+    background-color: rgba(60, 118, 61, 0.3);
 }
