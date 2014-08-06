@@ -16,7 +16,7 @@
 
     {% with field=form.email %}
     <section class="form-group">
-        <label class="col-xs-4 control-label" for="email">{{ field.label }}</label>
+        <label class="col-xs-4 control-label" for="email">{{ field.label }} *</label>
         <div class="col-xs-8">
              <input name="{{ field.html_name }}" id="email" type="email" class="form-control" required />
         </div>
