@@ -143,7 +143,6 @@
             // Convert my Date object naively...
             $scope.appointment.date = $scope.keyForDate($scope.date);
             // $log.log($scope.appointment);
-            return;
             $http.post('/book/', $scope.appointment).
                 success(function(data, status, headers, config) {
                     $window.location.href = '/finish/';
