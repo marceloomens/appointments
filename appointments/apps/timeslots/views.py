@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
+
 
 from datetime import timedelta
 
@@ -42,6 +44,7 @@ def locations(request, country):
     return HttpResponse(data, content_type='application/json')
 
 @require_GET
+@never_cache # Hopefully solves my ie8 thingymajig
 def timeslots(request, location):
     location = get_object_or_404(Constraint, slug=location)
 

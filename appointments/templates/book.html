@@ -17,6 +17,22 @@
 
     {% csrf_token %}
 
+    <section class="form-group" ng-class="{'has-success has-feedback': form.first_name.$valid && form.first_name.$dirty}">
+        <label class="col-xs-4 control-label" for="first_name">First name <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <input name="first_name" id="first_name" class="form-control" ng-model="appointment.first_name" required />
+            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.first_name.$valid && form.first_name.$dirty"></span>
+        </div>
+    </section>
+    
+    <section class="form-group" ng-class="{'has-success has-feedback': form.last_name.$valid && form.last_name.$dirty}">
+        <label class="col-xs-4 control-label" for="last_name">Last name <span class="required">*</span></label>
+        <div class="col-xs-8">
+            <input name="last_name" id="last_name" class="form-control" ng-model="appointment.last_name" required />
+            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.last_name.$valid && form.last_name.$dirty"></span>
+        </div>
+    </section>
+
     <section class="form-group" ng-class="{'has-success has-feedback': form.email.$valid && form.email.$dirty, 'has-error has-feedback': form.email.$invalid && form.email.$dirty}">
             <label class="col-xs-4 control-label" for="country">E-mail <span class="required">*</span></label>
             <div class="col-xs-8">
@@ -71,19 +87,11 @@
         </div>
     </section>
     
-    <section class="form-group" ng-class="{'has-success has-feedback': form.first_name.$valid && form.first_name.$dirty}">
-        <label class="col-xs-4 control-label" for="first_name">First name</label>
+    <section>
+        <div class="col-xs-4"></div>
         <div class="col-xs-8">
-            <input name="first_name" id="first_name" class="form-control" ng-model="appointment.first_name" />
-            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.first_name.$valid && form.first_name.$dirty"></span>
-        </div>
-    </section>
-    
-    <section class="form-group" ng-class="{'has-success has-feedback': form.last_name.$valid && form.last_name.$dirty}">
-        <label class="col-xs-4 control-label" for="last_name">Last name</label>
-        <div class="col-xs-8">
-            <input name="last_name" id="last_name" class="form-control" ng-model="appointment.last_name" />
-            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.last_name.$valid && form.last_name.$dirty"></span>
+            <h4>Appointment details</h4>
+            <p>Provide us with some extra information for faster processing times.</p>
         </div>
     </section>
     
@@ -103,22 +111,6 @@
                 <option value="male">Male</option>
                 <option value="femail">Female</option>
             </select>
-        </div>
-    </section>
-    
-    <section class="form-group" ng-class="{'has-success has-feedback': form.identity_number.$valid && form.identity_number.$dirty}">
-        <label class="col-xs-4 control-label" for="identity_number">Identity number</label>
-        <div class="col-xs-8">
-            <input name="identity_number" id="identity_number" class="form-control" ng-model="appointment.identity_number" />
-            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.identity_number.$valid && form.identity_number.$dirty"></span>
-        </div>
-    </section>
-    
-    <section class="form-group" ng-class="{'has-success has-feedback': form.document_number.$valid && form.document_number.$dirty}">
-        <label class="col-xs-4 control-label" for="document_number">Document number</label>
-        <div class="col-xs-8">
-            <input name="document_number" id="document_number" class="form-control" ng-model="appointment.document_number" />
-            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="form.document_number.$valid && form.document_number.$dirty"></span>
         </div>
     </section>
     

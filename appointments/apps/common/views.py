@@ -79,6 +79,7 @@ def book(request):
                 last_name=fields.get('last_name', None),
                 nationality=fields.get('nationality', None),
                 sex=sex,
+                # See if this works without any changes...
                 identity_number=fields.get('identity_number', None),
                 document_number=fields.get('document_number', None),
                 phone_number=fields.get('phone_number', None),
