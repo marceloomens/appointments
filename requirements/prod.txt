@@ -1,5 +1,5 @@
 # requirements/prod.txt
-dj-database-url==0.2.2
-gunicorn==18.0
-psycopg2==2.5.1
+dj-database-url==0.3.0
+gunicorn==19.1.1
+psycopg2==2.5.4
 -r common.txt
