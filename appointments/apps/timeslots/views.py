@@ -61,15 +61,26 @@ def timeslots(request, location):
     ubound      = qs.pop('ubound', None)
 
     if date and lbound:
-        return HttpResponseBadRequest()
+        error = {
+                'error' : 'expected date or lbound',
+            }
+        return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
+
     elif date and ubound:
-        return HttpResponseBadRequest()
+        error = {
+                'error' : 'expected date or ubound',
+            }
+        return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
+
     elif date:
         # That's okay
         try:
             date = strpdate(date)
         except ValueError:
-            return HttpResponseBadRequest()
+            error = {
+                    'error' : 'invalid date',
+                }
+            return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
             
         if date < minbound or maxbound < date:
             data = {
@@ -89,8 +100,11 @@ def timeslots(request, location):
             lbound = strpdate(lbound)
             ubound = strpdate(ubound)
         except ValueError:
-            return HttpResponseBadRequest()
-            
+            error = {
+                    'error' : 'invalid lbound or ubound',
+                }
+            return HttpResponseBadRequest(json.dumps(error), content_type='application/json')            
+
         if maxbound <= lbound or ubound <= minbound:
             data = {
                     'error'     : 'parameters out of bounds',
@@ -105,7 +119,11 @@ def timeslots(request, location):
         ubound = maxbound if maxbound < ubound else ubound
         
     elif lbound or ubound:  
-        return HttpResponseBadRequest()
+            error = {
+                    'error' : 'expected lbound and ubound',
+                }
+            return HttpResponseBadRequest(json.dumps(error), content_type='application/json')
+
     else:
         # Use defaults
         lbound = minbound

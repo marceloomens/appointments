@@ -20,5 +20,5 @@ class Command(BaseCommand):
             send_report(report)
 
         # Finish up
-        logger.info('sendreports command finished')        
-            
+        logger.info('sendreports command finished')
+                    
