@@ -9,6 +9,8 @@ from .models import Appointment, Report, User
 
 class AppointmentAdmin(admin.ModelAdmin):
 
+    # Override get_form to modify foreignkey behaviour    
+
     date_hierarchy = 'date'
     fieldsets = (
         (None, {'fields': ('user', 'constraint', 'date', 'time', 'action', 'status')}),
@@ -21,7 +23,12 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display = ('user', 'action', 'constraint', 'date', 'time', 'status')
     list_filter = ('status', 'constraint')
     ordering = ('-date', 'time')
-    readonly_fields = ('modified', 'created')
+    readonly_fields = ('user', 'modified', 'created')
+    view_on_site = False
+    
+    def has_add_permission(self, request):
+        return False
+    
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -37,8 +44,8 @@ class ReportAdmin(admin.ModelAdmin):
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = User
@@ -55,7 +62,12 @@ class UserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super(UserCreationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
+        if len(self.cleaned_data["password1"]) < 1:
+            # This path is to enable creating new users on the backend
+            user.set_unusable_password()
+            user.is_active = False
+        else:    
+            user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
         return user
@@ -66,7 +78,11 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    password = ReadOnlyPasswordHashField()
+    password = ReadOnlyPasswordHashField(
+        # Feels hackish
+        help_text=("Raw passwords are not stored, so there is no way to see "
+        "this user's password, but you can change the password "
+        "using <a href=\"password/\">this form</a>."))
 
     class Meta:
         model = User

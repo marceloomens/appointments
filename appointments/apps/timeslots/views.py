@@ -20,6 +20,8 @@ from .utils import availability, strfdate, strpdate
 # def ng_test(request):
 #     return render(request, template_name='ng-test.html')
 
+# Utilise Django 1.7's new JSONReponse class
+
 @require_GET
 def actions(request, location):
     location = get_object_or_404(Constraint, slug=location)
