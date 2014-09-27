@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module("timeslots", ['ui.bootstrap']);
+    var app = angular.module("timeslots", ['angularMoment', 'ui.bootstrap']);
     
     app.config(['$httpProvider', function($httpProvider) {
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';

@@ -4,7 +4,10 @@
 {% block ng_app %} ng-app="timeslots"{% endblock %}
 
 {% block head %}
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'js/moment-timezone-with-data-2010-2020.min.js' %}"></script>    
     <script src="{% static 'js/angular.min.js' %}"></script>
+    <script src="{% static 'js/angular-moment.min.js' %}"></script>
     <script src="{% static 'js/ui-bootstrap-tpls-0.11.0.min.js' %}"></script>
     <script src="{% static 'js/timeslots.js' %}"></script>
 {% endblock %}
@@ -90,29 +93,11 @@
     <section>
         <div class="col-xs-4"></div>
         <div class="col-xs-8">
-            <h4>Appointment details</h4>
-            <p>Provide us with some extra information for faster processing times.</p>
+            <h4>Additional information</h4>
+            <p>Anything else that might be important ahead of your appointment.</p>
         </div>
     </section>
-    
-    <section class="form-group">
-        <label class="col-xs-4 control-label" for="nationality">Nationality</label>
-        <div class="col-xs-8">
-            <input name="nationality" id="nationality" class="form-control" ng-model="appointment.nationality" />
-        </div>
-    </section>
-    
-    <section class="form-group">
-        <label class="col-xs-4 control-label" for="sex">Sex</label>
-        <div class="col-xs-8">
-            <select name="sex" id="sex" class="form-control" ng-model="appointment.sex">
-                <option value="">-- select gender --</option>
-                <option value="male">Male</option>
-                <option value="femail">Female</option>
-            </select>
-        </div>
-    </section>
-    
+
     <section class="form-group">
         <label class="col-xs-4 control-label" for="phone_number">Phone number</label>
         <div class="col-xs-8">

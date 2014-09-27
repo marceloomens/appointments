@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -20,11 +20,13 @@ from .utils import availability, strfdate, strpdate
 # def ng_test(request):
 #     return render(request, template_name='ng-test.html')
 
-# Utilise Django 1.7's new JSONReponse class
+# Utilise Django 1.7's new JsonReponse class
 
 @require_GET
 def actions(request, location):
     location = get_object_or_404(Constraint, slug=location)
+    # JsonResponse by default can serialize next to nothing
+    # return JsonResponse(location.actions.all(), safe=False)
     data = serializers.serialize('json', location.actions.all())
     return HttpResponse(data, content_type='application/json')
 
