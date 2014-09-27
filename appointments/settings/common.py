@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,12 +34,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Third-party apps
-    'raven.contrib.django.raven_compat',
     # My apps
     'appointments.apps.timeslots',
     'appointments.apps.common',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -123,12 +121,6 @@ DEFAULT_FROM_EMAIL  = POSTMARK_SENDER
 SERVER_EMAIL        = POSTMARK_SENDER
 
 EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
-
-# Raven app configuration
-
-RAVEN_CONFIG = {
-    'dsn': os.environ['SENTRY_DSN'],
-}
 
 # Timeslots app configuration
 TIMESLOTS_DATE_FORMAT = '%Y-%m-%d'

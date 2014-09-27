@@ -12,6 +12,13 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
+# Raven app configuration
+INSTALLED_APPS.append('raven.contrib.django.raven_compat')
+
+RAVEN_CONFIG = {
+    'dsn': os.environ['SENTRY_DSN'],
+}
+
 # Static asset configuration
 STATIC_ROOT = 'staticfiles'
 
