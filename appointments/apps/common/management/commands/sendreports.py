@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 
-import logging
+import logging, pytz
+
+from datetime import datetime, time, timedelta
 
 from appointments.apps.common.models import Report
 from appointments.apps.common.utils import send_report
@@ -16,8 +19,35 @@ class Command(BaseCommand):
 
         # Command logic
         reports = Report.objects.filter(enabled=True)
-        for report in reports:
+        for report in reports:            
+            tz = pytz.timezone(report.constraint.timezone)
+            now = datetime.now(tz=tz)
+
+            # Check that this is a relevant weekday this for this report
+            if now.weekday() > 4:
+                # For now I'll just skip the weekend
+                continue
+
+            # Check that the time in the constraint's timezone falls between
+            # 00:00 and 01:00 (exclusive)
+            if not time(0, tzinfo=tz) <= now.time() < time(1, tzinfo=tz):
+                # It's not the right time to send this report
+                continue
+            
+            # Check that this report was not sent previously in the last hour
+            # last_sent uses server default timezone (settings.TIME_ZONE)
+            if not report.last_sent:
+                # Report was never sent before; send now
+                pass
+            elif (timezone.now() - report.last_sent) < timedelta(hours=1):
+                # This report was already sent in the last hour
+                continue
+            
+            # It's time to send this report
             send_report(report)
+            
+            report.last_sent = timezone.now()
+            report.save()
 
         # Finish up
         logger.info('sendreports command finished')

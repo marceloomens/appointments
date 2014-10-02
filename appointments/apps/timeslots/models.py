@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
+
+import pytz
 
 # Create your models here.
 
@@ -43,6 +46,9 @@ class Constraint (models.Model):
 
     key = models.ForeignKey(ConstraintSet, related_name='values')
     actions = models.ManyToManyField(Action, related_name='constraints', blank=True)
+    
+    timezone = models.CharField(max_length=32, default=settings.TIME_ZONE,
+        choices=list((x,x) for x in pytz.common_timezones))
 
     enabled = models.BooleanField(default=True)
 

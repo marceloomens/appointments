@@ -16,9 +16,9 @@ class ActionAdmin(admin.ModelAdmin):
 
 class ConstraintAdmin(admin.ModelAdmin):
     
-    fields = ('name', 'slug', 'enabled', 'actions',)
+    fields = ('name', 'slug', 'timezone', 'enabled', 'actions',)
     filter_horizontal = ('actions',)
-    list_display = ('name', 'slug', 'enabled',)
+    list_display = ('name', 'timezone', 'slug', 'enabled',)
     readonly_fields = ('name', 'slug', 'enabled',)
     
     def has_add_permission(self, request):

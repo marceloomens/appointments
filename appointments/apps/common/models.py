@@ -119,6 +119,8 @@ class Report(models.Model):
             ('DA', 'daily'),
             # ('SP', 'spot'),
         ])
+        
+    last_sent = models.DateTimeField(null=True, default=None)
     
     enabled = models.BooleanField(default=True)
     

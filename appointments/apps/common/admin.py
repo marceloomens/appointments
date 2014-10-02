@@ -32,9 +32,10 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 
 class ReportAdmin(admin.ModelAdmin):
-    fields = ('user', 'constraint', 'kind', 'enabled')
-    list_display = ('enabled', 'user', 'constraint', 'kind')
+    fields = ('user', 'constraint', 'kind', 'last_sent', 'enabled')
+    list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent')
     list_display_links = ('user',)
+    readonly_fields = ('last_sent',)
 
 
 # Custom user model admdin; uses e-mail for unique id/username
