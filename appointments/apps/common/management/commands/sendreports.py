@@ -30,7 +30,8 @@ class Command(BaseCommand):
 
             # Check that the time in the constraint's timezone falls between
             # 00:00 and 01:00 (exclusive)
-            if not time(0, tzinfo=tz) <= now.time() < time(1, tzinfo=tz):
+            print(now.time())
+            if not time(0, tzinfo=tz) <= now.timetz() < time(1, tzinfo=tz):
                 # It's not the right time to send this report
                 continue
             
@@ -51,4 +52,7 @@ class Command(BaseCommand):
 
         # Finish up
         logger.info('sendreports command finished')
+        
+        
+print(__name__)
                     

@@ -114,7 +114,7 @@ MESSAGE_TAGS = {
 
 # Postmark confiruration
 POSTMARK_API_KEY    = os.environ['POSTMARK_API_KEY']
-POSTMARK_SENDER     = 'appointments@marceloomens.com'
+POSTMARK_SENDER     = 'appointments@hollandinchina.org'
 POSTMARK_TEST_MODE  = False
 
 DEFAULT_FROM_EMAIL  = POSTMARK_SENDER
