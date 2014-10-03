@@ -91,12 +91,25 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
+        'verbose': {
+                'format': '%(module)s %(levelname)s %(asctime)s %(message)s',
+            },
     },
     'filters': {
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        }
     },
     'loggers': {
+        'appointments.apps.common.management': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     },
 }
 
