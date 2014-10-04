@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content%}
-<form name="form" role="form" ng-controller="TimeslotCtrl as timeslots" novalidate class="form-horizontal">
+<form name="form" role="form" ng-controller="TimeslotCtrl as timeslots" ng-init="country='china'; countryChanged();" novalidate class="form-horizontal">
             
     <legend></legend>
     <p class="text-right"><small>Fields denoted with <span class="required">*</span> are required.</small></p>
@@ -48,7 +48,7 @@
     <section class="form-group">
         <label class="col-xs-4 control-label" for="country">Country <span class="required">*</span></label>
         <div class="col-xs-8">
-            <select name="country" id="country" class="form-control" ng-model="country" ng-options="country.fields.slug as country.fields.name for country in countries" ng-change="countryChanged()" required>
+            <select name="country" id="country" class="form-control" ng-model="country" ng-options="country.fields.slug as country.fields.name for country in countries" ng-change="countryChanged()" required disabled>
                 <option value="">-- select country --</option>
             </select>
         </div>
