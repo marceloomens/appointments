@@ -102,14 +102,23 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
-        }
+        },
     },
     'loggers': {
         'appointments.apps.common.management': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
-        }
+        },
+        'appointments.apps.common': {
+            'propagate': True,
+        },
+        'appointments.apps.timeslots': {
+            'propagate': True,
+        },
+        'appointments': {
+            'propagate': False,
+        },        
     },
 }
 
