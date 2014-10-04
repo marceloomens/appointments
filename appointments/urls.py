@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 
+handler404 = 'appointments.apps.common.views.handler404'
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'temp.views.home', name='home'),

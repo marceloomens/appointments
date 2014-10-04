@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-import dateutil.parser, json
+import dateutil.parser, json, logging
 
 from itsdangerous import BadSignature
 
@@ -20,6 +20,8 @@ from .utils import get_serializer, send_confirmation, send_receipt, send_reminde
 
 # Create your views here.
 
+logger = logging.getLogger(__name__)
+
 def book(request):
     
     if 'POST' == request.method and request.is_ajax():
@@ -29,7 +31,8 @@ def book(request):
             user = User.objects.get(email__iexact=fields['email'])
         except KeyError:
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest
+            logger.warning("Bad form submission: KeyError (email)", extra=request)
+            return HttpResponseBadRequest()
         except User.DoesNotExist:
             user = User(email=fields['email'], is_active=False)
             user.save()
@@ -37,18 +40,21 @@ def book(request):
         try:
             action = Action.objects.get(slug=fields['action'])
         except (KeyError, Action.DoesNotExist):
+            logger.warning("Bad form submission: KeyError (action) or Action.DoesNotExist", extra=request)
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest
+            return HttpResponseBadRequest()
         
         try:
             constraint = Constraint.objects.get(slug=fields['constraint'])
         except (KeyError, Constraint.DoesNotExist):
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest
+            logger.warning("Bad form submission: KeyError (constraint) or Constraint.DoesNotExist", extra=request)
+            return HttpResponseBadRequest()
             
         if action not in constraint.actions.all():
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest
+            logger.warning("Bad form submission: bad constraint/action combination", extra=request)
+            return HttpResponseBadRequest()
 
         # Ignore timezone to prevent one-off problems
         try:
@@ -56,12 +62,14 @@ def book(request):
             time = strptime(fields['time'])
         except KeyError:
             # This is an error; time to log, then fail
-            return HttpResponseBadRequest
+            logger.warning("Bad form submission: KeyError (date and/or time)", extra=request)
+            return HttpResponseBadRequest()
         
         # Check if timeslot is available
         if not is_available(constraint, date, time):
             # Return some meaningful JSON to say that time is not available
-            return HttpResponseBadRequest            
+            logger.warning("Bad form submission: timeslot not available", extra=request)
+            return HttpResponseBadRequest()            
         
         # Preprocess sex to ensure it's a valid value
         sex = fields['sex'][0].upper() if fields.get('sex', None) else None
@@ -98,6 +106,7 @@ def book(request):
 
     
     elif 'POST' == request.method:
+        logger.warning("XMLHttpRequest header not set on POST request", extra=request)
         return HttpResponseBadRequest("XMLHttpRequest (AJAX) form submissions only please!")
     
     return render(request, 'book.html')
@@ -169,3 +178,8 @@ def reminder(request):
         form = ReminderForm()
             
     return render(request, 'reminder.html', {'form': form})
+    
+# Custom error views
+    
+def handler404(request):
+    return render(request, '404.html')

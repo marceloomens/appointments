@@ -1,0 +1,15 @@
+{% extends 'common.html' %}
+
+{% block header %}
+<h3>Page not found</h3>
+<p>Sorry, but we couldn't find the page you're looking for.</p>
+{% endblock %}
+
+{% block content%}
+
+<p>Perhaps you were looking for one of these:</p>
+<ul>
+    <li><a href="{% url 'home' %}" title="Book an appointment">Book an appointment&nbsp;&rarr;</a></li>
+    <li><a href="{% url 'reminder' %}" title="Remind me of my upcoming appointments">Remind me of my upcoming appointments&nbsp;&rarr;</a></li>
+</ul>
+{% endblock %}

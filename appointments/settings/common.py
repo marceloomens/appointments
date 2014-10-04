@@ -111,6 +111,8 @@ LOGGING = {
             'propagate': False,
         },
         'appointments.apps.common': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': True,
         },
         'appointments.apps.timeslots': {
