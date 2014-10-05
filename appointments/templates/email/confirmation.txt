@@ -3,7 +3,7 @@ Dear Sir or Madam,
 
 You scheduled an appointment in {{ appointment.constraint.name }} on {{ appointment.date }} at {{ appointment.time }} o'clock.
 
-Action: {{ appointment.action.name }}
+Service: {{ appointment.action.name }}
 
 This appointment is now confirmed. No further action is required on your part, we look forward to seeing you in {{ appointment.constraint.name }} at the agreed upon time.
 
@@ -13,4 +13,6 @@ You can still cancel this appointment. To CANCEL please click on the cancellatio
 Yours kindly,
 
 
-The appointments system
+--
+Netherlands Embassy in Beijing
+http://www.hollandinchina.org

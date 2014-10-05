@@ -1,7 +1,7 @@
 {% load common_filters %}
 Dear {{ report.user.get_full_name }},
 
-Please log into the appointment manager for a list of scheduled appointments. Alternatively use e-mail software that can display e-mail is HTML mark-up.
+Please log into the appointment manager for a list of scheduled appointments. Alternatively use e-mail software that can display e-mail in HTML mark-up.
 
 Appointment manager:
 {{ 'admin:index'|absurl }}
@@ -9,4 +9,6 @@ Appointment manager:
 Yours kindly,
 
 
-The appointments system
+--
+Netherlands Embassy in Beijing
+http://www.hollandinchina.org

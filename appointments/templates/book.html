@@ -82,10 +82,10 @@
     </section>
 
     <section class="form-group">
-        <label class="col-xs-4 control-label" for="action">Action <span class="required">*</span></label>
+        <label class="col-xs-4 control-label" for="action">Service <span class="required">*</span></label>
         <div class="col-xs-8">
             <select name="action" id="action" class="form-control" ng-model="appointment.action" ng-options="action.fields.slug as action.fields.name for action in actions" required>
-                <option value="">-- select action --</option>
+                <option value="">-- select service --</option>
             </select>
         </div>
     </section>
@@ -123,7 +123,7 @@
         <aside class="col-xs-4"></aside>
         <div class="col-xs-8">
             <button type="button" class="btn btn-primary" ng-click="submit()" ng-disabled="!can_submit()">Submit</button>
-            <button type="button" class="btn btn-danger" disabled>Reset</button>
+            <button type="button" class="btn btn-danger" ng-hide="true" disabled>Reset</button>
             <p class="invalid text-danger" ng-hide="form.$valid"><small>Please check that you've entered all required information.</small></p>
             <p class="invalid text-danger" ng-show="locked"><small>Please wait...</small></p>
         </div>
