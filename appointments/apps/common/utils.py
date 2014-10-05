@@ -7,10 +7,18 @@ from django.utils.translation import ugettext as _
 
 from itsdangerous import URLSafeSerializer
 
+import logging
+
 from appointments.apps.timeslots.signals import willEvaluateAvailabilityForRange
 
 from .models import Appointment
 from .tasks import send_mail
+
+
+class DjangoRequestLoggerAdapter (logging.LoggerAdapter):
+
+    def process(self, msg, kwargs):
+        return "[%s %s] %s" % (self.extra.method, self.extra.path, msg), kwargs
 
 
 @receiver(willEvaluateAvailabilityForRange)
@@ -21,22 +29,28 @@ def availability_for_range_handler(sender, **kwargs):
         date__range=(kwargs['lbound'], kwargs['ubound']))
     appointments = appointments.exclude(status='CA')
                 
-    def availability_for_date_callback(date, timeslots):
+    def availability_for_date_callback(date, timeslots, supress_warnings=False):
     
         for appointment in appointments:
             if date == appointment.date:
                 if appointment.time in timeslots:
                     timeslots[appointment.time] -= 1
-                else:
-                    # Throw a warning, this should never happen after all...
-                    # THIS MIGHT HAPPEN WHEN CALLED FROM IS_AVAILABLE
+                elif not supress_warnings:
+                    # Throw a warning, this should never happen after all,
+                    # but might happen when called from is_available
                     import logging
                     l = logging.getLogger(__name__)
                     l.warning("Encountered booking for non-existing timeslot.", extra={'appointment_id': appointment.pk})
+                else:
+                    pass
                     
     return availability_for_date_callback
     
-    
+
+def get_logger(name=None, request=None, *args, **kwargs):
+    logger = logging.getLogger(name, *args, **kwargs)
+    return DjangoRequestLoggerAdapter(logger, request)
+
 def get_serializer(secret_key=None):
     if secret_key is None:
         secret_key = settings.SECRET_KEY

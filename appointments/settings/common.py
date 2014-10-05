@@ -92,7 +92,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-                'format': '%(module)s %(levelname)s %(asctime)s %(message)s',
+                'format': '%(module)s %(levelname)s %(message)s',
             },
     },
     'filters': {
@@ -111,16 +111,16 @@ LOGGING = {
             'propagate': False,
         },
         'appointments.apps.common': {
-            'handlers': ['console'],
-            'level': 'INFO',
             'propagate': True,
         },
         'appointments.apps.timeslots': {
             'propagate': True,
         },
         'appointments': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': False,
-        },        
+        },
     },
 }
 

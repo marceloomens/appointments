@@ -7,22 +7,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-import dateutil.parser, json, logging
+import dateutil.parser, json
 
 from itsdangerous import BadSignature
 
 from appointments.apps.timeslots.models import Action, Constraint
-from appointments.apps.timeslots.utils import strptime, is_available
+from appointments.apps.timeslots.utils import strfdate, strftime, strptime, is_available
 
 from .forms import ReminderForm
 from .models import Appointment, User
-from .utils import get_serializer, send_confirmation, send_receipt, send_reminder
+from .utils import get_logger, get_serializer, send_confirmation, send_receipt, send_reminder
 
 # Create your views here.
 
-logger = logging.getLogger(__name__)
-
 def book(request):
+
+    logger = get_logger(__name__, request)
     
     if 'POST' == request.method and request.is_ajax():
         fields = json.loads(request.body)
@@ -31,16 +31,17 @@ def book(request):
             user = User.objects.get(email__iexact=fields['email'])
         except KeyError:
             # This is an error; time to log, then fail
-            logger.warning("Bad form submission: KeyError (email)", extra=request)
+            logger.warning("Bad form submission: KeyError (email)")
             return HttpResponseBadRequest()
         except User.DoesNotExist:
             user = User(email=fields['email'], is_active=False)
             user.save()
-        
+            logger.info("New user %s" % (str(user)))
+
         try:
             action = Action.objects.get(slug=fields['action'])
         except (KeyError, Action.DoesNotExist):
-            logger.warning("Bad form submission: KeyError (action) or Action.DoesNotExist", extra=request)
+            logger.warning("Bad form submission: KeyError (action) or Action.DoesNotExist")
             # This is an error; time to log, then fail
             return HttpResponseBadRequest()
         
@@ -48,12 +49,12 @@ def book(request):
             constraint = Constraint.objects.get(slug=fields['constraint'])
         except (KeyError, Constraint.DoesNotExist):
             # This is an error; time to log, then fail
-            logger.warning("Bad form submission: KeyError (constraint) or Constraint.DoesNotExist", extra=request)
+            logger.warning("Bad form submission: KeyError (constraint) or Constraint.DoesNotExist")
             return HttpResponseBadRequest()
             
         if action not in constraint.actions.all():
             # This is an error; time to log, then fail
-            logger.warning("Bad form submission: bad constraint/action combination", extra=request)
+            logger.warning("Bad form submission: bad constraint/action combination")
             return HttpResponseBadRequest()
 
         # Ignore timezone to prevent one-off problems
@@ -62,13 +63,13 @@ def book(request):
             time = strptime(fields['time'])
         except KeyError:
             # This is an error; time to log, then fail
-            logger.warning("Bad form submission: KeyError (date and/or time)", extra=request)
+            logger.warning("Bad form submission: KeyError (date and/or time)")
             return HttpResponseBadRequest()
         
         # Check if timeslot is available
         if not is_available(constraint, date, time):
             # Return some meaningful JSON to say that time is not available
-            logger.warning("Bad form submission: timeslot not available", extra=request)
+            logger.warning("Bad form submission: timeslot not available")
             return HttpResponseBadRequest()            
         
         # Preprocess sex to ensure it's a valid value
@@ -95,9 +96,17 @@ def book(request):
                 comment=fields.get('comment', None),
             )
             
-        # Save the appointment
+        # Save the appointment; then log it
         appointment.save()
-        
+        logger.info("New appointment by %s in %s/%s on %s at %s" % (
+                    str(appointment.user),
+                    appointment.constraint.key.slug,
+                    appointment.constraint.slug,
+                    strfdate(appointment.date),
+                    strftime(appointment.time),
+                )
+            )
+            
         send_receipt(appointment)
         messages.success(request, _("We've send you an e-mail receipt. Please confirm your appointment by following the instructions."))
 
@@ -106,7 +115,7 @@ def book(request):
 
     
     elif 'POST' == request.method:
-        logger.warning("XMLHttpRequest header not set on POST request", extra=request)
+        logger.warning("XMLHttpRequest header not set on POST request")
         return HttpResponseBadRequest("XMLHttpRequest (AJAX) form submissions only please!")
     
     return render(request, 'book.html')

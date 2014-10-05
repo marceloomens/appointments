@@ -141,7 +141,7 @@ def is_available(constraint, date, time):
     callbacks = rangeSignal.send(__name__, lbound=date, ubound=date, constraint=constraint)
     for (receiver, callback) in callbacks:
         try:
-            callback(date, timeslots)
+            callback(date, timeslots, supress_warnings=True)
         except Exception as e:
             import logging
             l = logging.getLogger(__name__)
