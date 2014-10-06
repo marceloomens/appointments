@@ -94,11 +94,7 @@ def send_reminder(user, appointments):
         }
     send_mail.delay(**payload) if getattr(settings, 'SEND_MAIL_ASYNC', False) else send_mail(**payload)
 
-def send_report(report, appointments=None):
-    # If appointments = None then generate today's report
-    if not appointments:
-        date = timezone.now().date()
-        appointments = Appointment.objects.filter(constraint=report.constraint, date=date).order_by('time')
+def send_report(report, appointments):
     t = get_template('email/report.txt')
     h = get_template('email/report.html')
     c = Context({'report': report, 'appointments': appointments,})

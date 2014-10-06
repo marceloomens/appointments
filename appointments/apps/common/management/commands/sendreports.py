@@ -5,7 +5,7 @@ import logging, pytz
 
 from datetime import datetime, time, timedelta
 
-from appointments.apps.common.models import Report
+from appointments.apps.common.models import Appointment, Report
 from appointments.apps.common.utils import send_report
 
 class Command(BaseCommand):
@@ -45,7 +45,10 @@ class Command(BaseCommand):
             
             # It's time to send this report
             logger.info('sending <%s> to %s' % (str(report), str(report.user)))
-            send_report(report)
+            
+            # I can prevent multiple similar calls by looping per constraint/per report
+            appointments = Appointment.objects.filter(constraint=report.constraint, date=now.date()).order_by('time')
+            send_report(report, appointments)
             
             report.last_sent = timezone.now()
             report.save()
