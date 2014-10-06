@@ -8,9 +8,9 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET
 
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-import json
+import json, pytz
 
 from .models import ConstraintSet, Constraint, Definition
 from .utils import availability, strfdate, strpdate
@@ -52,8 +52,8 @@ def locations(request, country):
 def timeslots(request, location):
     location = get_object_or_404(Constraint, slug=location)
 
-    # Defaults
-    today = timezone.now().date()
+    tz = pytz.timezone(location.timezone)
+    today = datetime.now(tz=tz).date()
     minbound = today + timedelta(1)
     maxbound = minbound + timedelta(settings.TIMESLOTS_FUTURE)
 
