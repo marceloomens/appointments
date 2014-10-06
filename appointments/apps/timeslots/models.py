@@ -32,7 +32,7 @@ class ConstraintSet (models.Model):
     enabled = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = _("county")
+        verbose_name = _("country")
         verbose_name_plural =  _("countries")
     
     def __unicode__(self):
