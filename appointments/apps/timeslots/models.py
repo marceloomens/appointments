@@ -103,7 +103,7 @@ class Holiday (models.Model):
     
     class Meta:
         verbose_name = _("holiday")
-        verbose_name_plural =  _("holiday")
+        verbose_name_plural =  _("holidays")
         
     def __unicode__(self):
         return "Holiday id=%s" % (self.pk)    
