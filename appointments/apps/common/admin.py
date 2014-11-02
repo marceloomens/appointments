@@ -28,6 +28,27 @@ class AppointmentAdmin(admin.ModelAdmin):
     
     def has_add_permission(self, request):
         return False
+        
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        # Faster if we query on values?
+        if obj and obj.constraint in request.user.constraints.all():
+            return True
+        if obj:
+            return False
+        return True
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+        
+    def get_queryset(self, request):
+        qs = super(AppointmentAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(constraint__in=request.user.constraints.all())
     
 
 
@@ -109,11 +130,11 @@ class UserAdmin(UserAdmin):
     list_filter = ('is_active', 'is_admin', 'is_superuser')
     fieldsets = (
         (None, {'fields': ('email', 'password', 'is_active',)}),
-        ('Personal info', {'fields': ('first_name', 'last_name', )}),
-        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'groups', 'user_permissions'),
+        ('Personal info', {'fields': ('first_name', 'last_name',)}),
+        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'groups', 'constraints' ),
                             'classes': ('collapse',)}),
     )
-    filter_horizontal = ('groups','user_permissions',)
+    filter_horizontal = ('constraints','groups',)
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (

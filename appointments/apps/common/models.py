@@ -173,6 +173,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     first_name = models.CharField(max_length=64, blank=True, null=True)
     last_name = models.CharField(max_length=64, blank=True, null=True)
+    
+    constraints = models.ManyToManyField(Constraint, related_name='+')
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
