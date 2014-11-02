@@ -16,6 +16,11 @@ header { margin-bottom: 20px; }
 footer { margin-top: 20px; }
 
 tbody .btn-default {
-    border: 1px solid rgb(60, 118, 61);
+    border: 1px solid rgb(92, 184, 92); /* #5cb85c */
     background-color: rgba(60, 118, 61, 0.3);
+}
+
+tbody .btn-default.btn-booked {
+    border: 1px solid rgb(217, 83, 79); /* #d9534f */
+    background-color: rgba(217, 83, 79, 0.3);
 }

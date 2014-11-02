@@ -73,7 +73,6 @@
             $scope.clearTime();
         }
             
-
         $scope.dateChanged = function() {
             $scope.clearTime();
             if (undefined === $scope.date) {
@@ -102,6 +101,13 @@
             key = $scope.keyForDate(date);
             if ($scope.datetimes.data[key] === undefined) return true;
             return !($scope.datetimes.data[key].code === 0);
+        }
+        
+        $scope.booked = function(date) {
+            if ($scope.datetimes === null) return false;
+            key = $scope.keyForDate(date);
+            if ($scope.datetimes.data[key] === undefined) return false;
+            return $scope.datetimes.data[key].code === 2 || $scope.datetimes.data[key].code === 3;
         }
         
         $scope.keyForDate = function(date) {
