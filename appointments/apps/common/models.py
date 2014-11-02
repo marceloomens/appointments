@@ -108,7 +108,7 @@ class Appointment(models.Model):
 
 
 class Report(models.Model):
-        
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, limit_choices_to={'is_admin': True},
         verbose_name=_('user'))
         
@@ -123,6 +123,9 @@ class Report(models.Model):
     last_sent = models.DateTimeField(null=True, default=None)
     
     enabled = models.BooleanField(default=True)
+    
+    class Meta:
+        unique_together = (('user','constraint'),)
     
     def __unicode__(self):
         return "Report id=%s" % (self.pk)

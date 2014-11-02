@@ -25,9 +25,6 @@ class AppointmentAdmin(admin.ModelAdmin):
     ordering = ('-date', 'time')
     readonly_fields = ('user', 'date', 'time', 'constraint', 'modified', 'created')
     view_on_site = False
-    
-    def has_add_permission(self, request):
-        return False
         
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -38,11 +35,6 @@ class AppointmentAdmin(admin.ModelAdmin):
         if obj:
             return False
         return True
-    
-    def has_delete_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-        return False
         
     def get_queryset(self, request):
         qs = super(AppointmentAdmin, self).get_queryset(request)
@@ -57,6 +49,36 @@ class ReportAdmin(admin.ModelAdmin):
     list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent')
     list_display_links = ('user',)
     readonly_fields = ('last_sent',)
+    
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        # Faster if we query on values?
+        if obj and obj.constraint in request.user.constraints.all():
+            return True
+        if obj:
+            return False
+        return True
+    
+    def has_delete_permission(self, request, obj=None):
+        return self.has_change_permission(request, obj)
+    
+    def get_queryset(self, request):
+        qs = super(ReportAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(constraint__in=request.user.constraints.all())
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if request.user.is_superuser:
+            return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == 'user':
+            # How to logically restrict the set of users?
+            # Preferably all users that share at least one contraint with the current user
+            pass
+        if db_field.name == "constraint":
+            kwargs['queryset'] = request.user.constraints.all()
+        return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 # Custom user model admdin; uses e-mail for unique id/username
