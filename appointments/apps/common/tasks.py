@@ -1,4 +1,6 @@
-from celery import shared_task   
+from django.conf import settings
+
+from celery import shared_task
 from postmark import PMMail
 
 @shared_task
@@ -26,5 +28,10 @@ def send_mail(**kwargs):
     attachments:    A list of tuples or email.mime.base.MIMEBase objects
                     describing attachments.
     '''
-    mail = PMMail(**kwargs)
+    from_name = kwargs.pop('from_name', None)
+    if from_name:
+        sender = '%s <%s>' % (from_name, settings.POSTMARK_SENDER)
+        mail = PMMail(sender=sender, **kwargs)
+    else:
+        mail = PMMail(**kwargs)
     mail.send()

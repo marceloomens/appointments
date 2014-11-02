@@ -14,5 +14,5 @@ Yours kindly,
 
 
 --
-Netherlands Embassy in Beijing
+Consular representation in {{ appointment.constraint.name }}
 http://www.hollandinchina.org

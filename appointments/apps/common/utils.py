@@ -63,6 +63,7 @@ def send_confirmation(appointment):
     # h = get_template('email/confirmation.html')
     c = Context({'appointment': appointment,})
     payload = {
+            'from_name' : 'Consular representation in %s' % (appointment.constraint.name),
             'to'        : appointment.user.email,
             'subject'   : _("Appointment confirmation"),
             'text_body' : t.render(c),
@@ -75,6 +76,7 @@ def send_receipt(appointment):
     # h = get_template('email/receipt.html')
     c = Context({'appointment': appointment,})
     payload = {
+            'from_name' : 'Consular representation in %s' % (appointment.constraint.name),
             'to'        : appointment.user.email,
             'subject'   : _("Please confirm your appointment"),
             'text_body' : t.render(c),

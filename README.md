@@ -9,7 +9,7 @@ To-do
 - Indicated fully booked days in RED
 - Update e-mail templates to something sexier
 - Delete canceled appointments from the overview
-- Diversify the 'from' field of automated e-mails
+* Diversify the 'from' field of automated e-mails
 - Confirmations are obsolete (SHA)
 - Expand the functionality of the admin
 - Enable quick glace availability
