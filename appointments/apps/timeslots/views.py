@@ -42,9 +42,19 @@ def countries(request):
 @require_GET
 def locations(request, country):
     country = get_object_or_404(ConstraintSet, slug=country)
+    if not request.user.is_authenticated():
+        qs = country.values.filter(enabled=True)
+    elif request.user.is_superuser:
+        qs = country.values.all()
+    elif request.user.is_admin:
+        qs = country.values.all()
+        # only relevant after merging in constraint branch
+        # qs = country.values.exclude(enabled=False, constraint__in=request.user.constraints.all())
+        
     # data = [(location.name, location.slug) for location in country.values.all()]
     # return HttpResponse(json.dumps(data), content_type='application/json')
-    data = serializers.serialize('json', country.values.all())
+    data = serializers.serialize('json', qs)
+    # Can I reduce the number of locations if user is logged in?
     return HttpResponse(data, content_type='application/json')
 
 @require_GET
