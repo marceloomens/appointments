@@ -23,7 +23,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display = ('user', 'action', 'constraint', 'date', 'time', 'status')
     list_filter = ('status', 'constraint')
     ordering = ('-date', 'time')
-    readonly_fields = ('user', 'modified', 'created')
+    readonly_fields = ('user', 'date', 'time', 'constraint', 'modified', 'created')
     view_on_site = False
     
     def has_add_permission(self, request):
