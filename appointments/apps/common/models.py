@@ -99,6 +99,17 @@ class Appointment(models.Model):
         s = get_serializer()
         return s.dumps(self.pk)
         
+    def full_name(self):
+        if self.last_name and self.first_name:
+            return "%s %s" % (self.first_name, self.last_name)
+        if self.last_name and self.sex:
+            return "%s %s" % ('Mr.' if 'M' == self.sex else 'Ms.', self.last_name)
+        if self.last_name:
+            return "Mr./Ms. %s" % (self.last_name)
+        if self.first_name:
+            return self.first_name
+        return ""
+        
     class Meta:
         verbose_name = _("appointment")
         verbose_name_plural = _("appointments")

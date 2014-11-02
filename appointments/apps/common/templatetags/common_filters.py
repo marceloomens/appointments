@@ -34,3 +34,12 @@ def model_change_form(model):
     if not isinstance(model, Appointment):
         raise ValueError("Changeform currently works for Appointment model only")
     return urlunsplit([scheme, host, reverse('admin:common_appointment_change', args=(model.pk,)),'',''])
+    
+@register.filter(name='prettystatus')
+def pretty_status(key):
+    values = {
+            'CA' : 'cancelled',
+            'CO' : 'confirmed',
+            'PE' : 'pending'
+        }
+    return values.get(key)

@@ -5,22 +5,24 @@
 <tr>
     <th>Date</th>
     <th>Time</th>
+    <th>Name</th>
     <th>E-mail</th>
     <th>Service</th>
     <th>Status</th>
-    <th>More&hellip;</th>
+    <th>More information</th>
 </tr>
 {% for appointment in appointments %}
 <tr>
 <td>{{ appointment.date|date:"D, d M Y" }}</td>
 <td>{{ appointment.time|time:"H:i" }}</td>
+<td>{{ appointment.full_name }}</td>
 <td>{{ appointment.user.email }}</td>
 <td>{{ appointment.action.name }}</td>
-<td>{{ appointment.status }}</td>
-<td><a href="{{ appointment|changeform }}" title="More information about this appointment">More&nbsp;&rarr;</a></td>
+<td>{{ appointment.status|prettystatus }}</td>
+<td><a href="{{ appointment|changeform }}" title="More information about this appointment">manage&hellip;</a></td>
 </tr>
 {% empty %}
-<tr><td colspan="6">Looks like a quite day at the office. No appointments here!</td></tr>
+<tr><td colspan="7">Looks like a quite day at the office. No appointments here!</td></tr>
 {% endfor %}
 </table>
 <p>You can also log into the <a href="{{ 'admin:index'|absurl }}" title="Appointments manager">appointments manager</a> for a list of scheduled appointments</p>
