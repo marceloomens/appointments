@@ -6,7 +6,7 @@ To-do
 -----
 
 - Write custom 400, 500 handlers
-- Indicated fully booked days in RED (* feature)
+- Indicated fully booked days in RED (* feature branch)
 - Update e-mail templates to something sexier
 - Delete canceled appointments from the overview
 - Diversify the 'from' field of automated e-mails (*)
@@ -15,4 +15,4 @@ To-do
 - Enable quick glace availability
 - Check out raven.js
 - Usernames (e-mail) are case sensitive
-- Enbale internationalisation
+- Enable internationalisation
