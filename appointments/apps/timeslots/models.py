@@ -97,7 +97,7 @@ class Holiday (models.Model):
     constraint = models.ForeignKey(Constraint, verbose_name=_("location"), related_name='holidays')    
 
     date = models.DateField(_("date"))
-    reason = models.CharField(_("reason"), max_length=128)
+    reason = models.CharField(_("reason"), max_length=128, blank=True, default='')
 
     enabled = models.BooleanField(default=True)
     

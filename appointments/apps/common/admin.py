@@ -9,8 +9,6 @@ from .models import Appointment, Report, User
 
 class AppointmentAdmin(admin.ModelAdmin):
 
-    # Override get_form to modify foreignkey behaviour    
-
     date_hierarchy = 'date'
     fieldsets = (
         (None, {'fields': ('user', 'constraint', 'date', 'time', 'action', 'status')}),
@@ -24,44 +22,60 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'constraint')
     ordering = ('-date', 'time')
     readonly_fields = ('user', 'date', 'time', 'constraint', 'modified', 'created')
+    search_fields = ('user__email', 'first_name', 'last_name', 'comment')
     view_on_site = False
         
-    def has_change_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-        # Faster if we query on values?
-        if obj and obj.constraint in request.user.constraints.all():
-            return True
-        if obj:
-            return False
-        return True
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        # Restrict to only actions available for this constraint; there seems to
+        # be no obvious way to do this because I have no reference to the
+        # current object and no way to get one bar from evaluating the request.
+        return super(AppointmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
         
+    def get_actions(self, request):
+        actions = super(AppointmentAdmin, self).get_actions(request)
+        if not self.has_delete_permission(request):
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+        return actions
+
     def get_queryset(self, request):
         qs = super(AppointmentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(constraint__in=request.user.constraints.all())
-    
 
+    def has_add_permission(self, request):
+        return False
 
-class ReportAdmin(admin.ModelAdmin):
-    fields = ('user', 'constraint', 'kind', 'last_sent', 'enabled')
-    list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent')
-    list_display_links = ('user',)
-    readonly_fields = ('last_sent',)
-    
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True
-        # Faster if we query on values?
         if obj and obj.constraint in request.user.constraints.all():
             return True
         if obj:
             return False
         return True
-    
-    def has_delete_permission(self, request, obj=None):
-        return self.has_change_permission(request, obj)
+
+
+class ReportAdmin(admin.ModelAdmin):
+
+    fields = ('user', 'constraint', 'kind', 'last_sent', 'enabled')
+    list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent')
+    list_display_links = ('user',)
+    list_filter = ('constraint',)
+    ordering = ('user',)
+    readonly_fields = ('last_sent',)
+    view_on_site = False
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if request.user.is_superuser:
+            return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == 'user':
+            # This seems to work but I guess it could do with some more testing
+            kwargs['queryset'] = User.objects.filter(constraints__in=request.user.constraints.all())
+        if db_field.name == 'constraint':
+            kwargs['queryset'] = request.user.constraints.all()
+        return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
     
     def get_queryset(self, request):
         qs = super(ReportAdmin, self).get_queryset(request)
@@ -69,16 +83,17 @@ class ReportAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(constraint__in=request.user.constraints.all())
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
-            return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        if db_field.name == 'user':
-            # How to logically restrict the set of users?
-            # Preferably all users that share at least one contraint with the current user
-            pass
-        if db_field.name == "constraint":
-            kwargs['queryset'] = request.user.constraints.all()
-        return super(ReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+            return True
+        if obj and obj.constraint in request.user.constraints.all():
+            return True
+        if obj:
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return self.has_change_permission(request, obj)
 
 
 # Custom user model admdin; uses e-mail for unique id/username
@@ -130,7 +145,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name', 'is_active', 'is_admin', 'is_superuser')
+        exclude = []
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -167,6 +182,8 @@ class UserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
+    view_on_site = False
+    
 
 # Now register the new UserAdmin...
 admin.site.register(Appointment, AppointmentAdmin)

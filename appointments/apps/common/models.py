@@ -11,7 +11,7 @@ from appointments.apps.timeslots.models import Action, Constraint
 
 class Appointment(models.Model):
     
-    # Required fields
+    # Required fields; eventually get rid of this
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='appointments')
     
     action = models.ForeignKey(Action, related_name='+',
@@ -62,27 +62,27 @@ class Appointment(models.Model):
     
 
     # Optional fields
-    first_name = models.CharField(max_length=64, blank=True, null=True,
+    first_name = models.CharField(max_length=64, blank=True, default='',
         verbose_name=_('first name'))
-    last_name = models.CharField(max_length=64, blank=True, null=True,
+    last_name = models.CharField(max_length=64, blank=True, default='',
         verbose_name=_('last name'))
-    nationality = models.CharField(max_length=32, blank=True, null=True,
+    nationality = models.CharField(max_length=32, blank=True, default='',
         verbose_name=_('nationality'))
-    sex = models.CharField(max_length=1, blank=True, null=True,
+    sex = models.CharField(max_length=1, blank=True, default='',
         choices=(('M', _('Male')), ('F', _('Female')),),
         verbose_name=_('sex'))
         
-    identity_number = models.CharField(max_length=64, blank=True, null=True,
+    identity_number = models.CharField(max_length=64, blank=True, default='',
         verbose_name=_('identity number'))
-    document_number = models.CharField(max_length=64, blank=True, null=True,
+    document_number = models.CharField(max_length=64, blank=True, default='',
         verbose_name=_('document number'))
     
-    phone_number = models.CharField(max_length=16, blank=True, null=True,
+    phone_number = models.CharField(max_length=16, blank=True, default='',
         verbose_name=_('phone number'))
-    mobile_number = models.CharField(max_length=16, blank=True, null=True,
+    mobile_number = models.CharField(max_length=16, blank=True, default='',
         verbose_name=_('mobile number'))
 
-    comment = models.TextField(blank=True, null=True,
+    comment = models.TextField(blank=True, default='',
         verbose_name=_('comment'))    
 
     # Audit fields
@@ -174,10 +174,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
     
-    first_name = models.CharField(max_length=64, blank=True, null=True)
-    last_name = models.CharField(max_length=64, blank=True, null=True)
+    first_name = models.CharField(max_length=64, blank=True, default='')
+    last_name = models.CharField(max_length=64, blank=True, default='')
     
-    constraints = models.ManyToManyField(Constraint, related_name='+')
+    constraints = models.ManyToManyField(Constraint, related_name='+', blank=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
