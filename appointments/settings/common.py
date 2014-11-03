@@ -85,6 +85,8 @@ TEMPLATE_DIRS = (
 
 AUTH_USER_MODEL = 'common.User'
 
+AUTHENTICATION_BACKENDS = ('appointments.apps.common.utils.EmailAuthenticationBackend',)
+
 # Logging
 
 LOGGING = {
