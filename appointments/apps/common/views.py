@@ -75,7 +75,7 @@ def book(request):
         # Preprocess sex to ensure it's a valid value
         sex = fields['sex'][0].upper() if fields.get('sex', None) else None
         if sex not in ['M', 'F']:
-            sex is None
+            sex = ''
         
         appointment = Appointment(
                 user=user,
@@ -84,16 +84,16 @@ def book(request):
                 date=date,
                 time=time,
                 # Optional fields...
-                first_name=fields.get('first_name', None),
-                last_name=fields.get('last_name', None),
-                nationality=fields.get('nationality', None),
+                first_name=fields.get('first_name',''),
+                last_name=fields.get('last_name',''),
+                nationality = fields.get('nationality',''),
                 sex=sex,
                 # See if this works without any changes...
-                identity_number=fields.get('identity_number', None),
-                document_number=fields.get('document_number', None),
-                phone_number=fields.get('phone_number', None),
-                mobile_number=fields.get('mobile_number', None),
-                comment=fields.get('comment', None),
+                identity_number=fields.get('identity_number',''),
+                document_number=fields.get('document_number',''),
+                phone_number=fields.get('phone_number',''),
+                mobile_number=fields.get('mobile_number',''),
+                comment=fields.get('comment',''),
             )
             
         # Save the appointment; then log it
