@@ -47,6 +47,7 @@ class Command(BaseCommand):
             logger.info('sending <%s> to %s' % (str(report), str(report.user)))
             
             # I can prevent multiple similar calls by looping per constraint/per report
+            # appointments = Appointment.objects.filter(constraint=report.constraint, date=now.date(), status__in=['PE','CO']).order_by('time')
             appointments = Appointment.objects.filter(constraint=report.constraint, date=now.date()).order_by('time')
             send_report(report, appointments)
             
