@@ -86,7 +86,7 @@ def book(request):
                 # Optional fields...
                 first_name=fields.get('first_name', None),
                 last_name=fields.get('last_name', None),
-                nationality=fields.get('nationality', None),
+                nationality = fields.get('nationality') if hasattr(fields, 'nationality')
                 sex=sex,
                 # See if this works without any changes...
                 identity_number=fields.get('identity_number', None),
