@@ -175,6 +175,7 @@ def reminder(request):
                 user = User.objects.get(email=email)
                 date = timezone.now().date()
                 appointments = user.appointments.filter(date__gte=date)
+                appointments = appointments.exclude(status='CA')
                 send_reminder(user, appointments)
                 
             except User.DoesNotExist:
