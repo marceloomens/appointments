@@ -89,11 +89,6 @@ class Appointment(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(auto_now=True, editable=False)
 
-    # Utility methods
-    def get_absolute_url(self):
-        # Return admin URL or confirmation url?
-        pass
-
     def get_url_safe_key(self):
         from .utils import get_serializer
         s = get_serializer()
