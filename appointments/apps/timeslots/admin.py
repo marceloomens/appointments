@@ -80,8 +80,8 @@ class DefinitionAdmin(admin.ModelAdmin):
     
 class HolidayAdmin(admin.ModelAdmin):
 
-    fields = ('constraint', 'date', 'reason', 'enabled')
-    list_display = ('constraint', 'date', 'reason', 'enabled')
+    fields = ('constraint', 'date', 'reason', 'enabled',)
+    list_display = ('constraint', 'date', 'reason', 'enabled',)
     view_on_site = False
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

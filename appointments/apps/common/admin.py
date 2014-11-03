@@ -11,18 +11,18 @@ class AppointmentAdmin(admin.ModelAdmin):
 
     date_hierarchy = 'date'
     fieldsets = (
-        (None, {'fields': ('user', 'constraint', 'date', 'time', 'action', 'status')}),
+        (None, {'fields': ('user', 'constraint', 'date', 'time', 'action', 'status',)}),
         ('Additional information', {'fields': ('first_name', 'last_name', 'nationality', 'sex',
-                'identity_number', 'document_number', 'phone_number', 'mobile_number', 'comment'),
+                'identity_number', 'document_number', 'phone_number', 'mobile_number', 'comment',),
             'classes': ('collapse',)}),
-        ('Auditing information', {'fields': ('created', 'modified'),
+        ('Auditing information', {'fields': ('created', 'modified',),
             'classes': ('collapse',)}),
     )   
-    list_display = ('user', 'action', 'constraint', 'date', 'time', 'status')
-    list_filter = ('status', 'constraint')
-    ordering = ('-date', 'time')
-    readonly_fields = ('user', 'date', 'time', 'constraint', 'modified', 'created')
-    search_fields = ('user__email', 'first_name', 'last_name', 'comment')
+    list_display = ('user', 'action', 'constraint', 'date', 'time', 'status',)
+    list_filter = ('status', 'constraint',)
+    ordering = ('-date', 'time',)
+    readonly_fields = ('user', 'date', 'time', 'constraint', 'modified', 'created',)
+    search_fields = ('user__email', 'first_name', 'last_name', 'comment',)
     view_on_site = False
         
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -59,8 +59,8 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
 
-    fields = ('user', 'constraint', 'kind', 'last_sent', 'enabled')
-    list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent')
+    fields = ('user', 'constraint', 'kind', 'last_sent', 'enabled',)
+    list_display = ('enabled', 'user', 'constraint', 'kind', 'last_sent',)
     list_display_links = ('user',)
     list_filter = ('constraint',)
     ordering = ('user',)
@@ -162,13 +162,13 @@ class UserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('is_active', 'email', 'get_full_name', 'is_admin', 'is_superuser')
-    list_display_links = ('email', 'get_full_name')
-    list_filter = ('is_active', 'is_admin', 'is_superuser')
+    list_display = ('is_active', 'email', 'get_full_name', 'is_admin', 'is_superuser',)
+    list_display_links = ('email', 'get_full_name',)
+    list_filter = ('is_active', 'is_admin', 'is_superuser',)
     fieldsets = (
         (None, {'fields': ('email', 'password', 'is_active',)}),
         ('Personal info', {'fields': ('first_name', 'last_name',)}),
-        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'groups', 'constraints' ),
+        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'groups', 'constraints',),
                             'classes': ('collapse',)}),
     )
     filter_horizontal = ('constraints','groups',)
@@ -177,7 +177,7 @@ class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('email', 'password1', 'password2',)}
         ),
     )
     search_fields = ('email',)

@@ -120,7 +120,7 @@ class Report(models.Model):
     enabled = models.BooleanField(default=True)
     
     class Meta:
-        unique_together = (('user','constraint'),)
+        unique_together = (('user','constraint',),)
     
     def __unicode__(self):
         return "Report id=%s" % (self.pk)
