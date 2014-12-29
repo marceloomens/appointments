@@ -91,8 +91,9 @@ def book(request):
                 # See if this works without any changes...
                 identity_number=fields.get('identity_number',''),
                 document_number=fields.get('document_number',''),
-                phone_number=fields.get('phone_number',''),
-                mobile_number=fields.get('mobile_number',''),
+                # Reduces numbers to a set of known characters and truncates at 16 characters
+                phone_number=''.join([c for c in fields.get('phone_number','') if c in '1234567890+'])[:16],
+                mobile_number=''.join([c for c in fields.get('mobile_number','') if c in '1234567890+'])[:16],
                 comment=fields.get('comment',''),
             )
             
